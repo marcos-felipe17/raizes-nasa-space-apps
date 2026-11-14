@@ -1,0 +1,42 @@
+# Configuração local e segredos
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Dependências e builds JavaScript/TypeScript
+node_modules/
+.next/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# Ambientes, caches e builds Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# Dados baixados e caches locais; fixtures versionadas ficam fora dessas pastas
+data/cache/
+data/downloads/
+data/private/
+
+# Arquivos de sistema e editores
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
+*.swp
+
+# Logs e temporários
+*.log
+tmp/
+temp/
