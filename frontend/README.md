@@ -32,6 +32,26 @@ A página `/localizacao` recebe município e UF e mostra coordenadas aproximadas
 
 A página `/cobertura` consulta a cobertura climática de um ponto e lê deste navegador quais dados da área já foram informados. Disponibilidade de dado não significa que uma rotação possa ser recomendada.
 
-# Página inicial
+# Fluxo principal
 
-A rota `/` lista as etapas existentes, na ordem do fluxo.
+Telas de celular que seguem a identidade visual da equipe (azul NASA, Space Grotesk nos títulos e Inter no restante). Os estilos ficam em `app/raizes.css`, os componentes em `app/_ui/` e os ícones em `public/raizes/`.
+
+| Rota | Tela | De onde vêm os dados |
+|---|---|---|
+| `/` | Início | Texto fixo |
+| `/area` | Passo 1: município, água e solo | Localização (UC-02) e perfil (UC-03 e UC-04) |
+| `/dados` | Passo 2: o que já sabemos | Cobertura (UC-08) e o que foi informado no passo 1 |
+| `/plantar` | Passo 3: 1ª e 2ª safra | Proposta de rotação (UC-10) |
+| `/resultado` | Rotações avaliadas | Comparação (UC-16) |
+| `/resultado/detalhe` | Estado e motivo de uma rotação | Restrições (UC-11) |
+| `/exemplo` e subrotas | Exemplo com os três estados | Dados fictícios, fixos no código |
+
+Limites desta versão:
+
+- No fluxo real nenhuma rotação sai "elegível" e nenhum índice R é exibido, porque ainda não há regras regionais conferidas. O estado "elegível" e o valor de R só aparecem em `/exemplo`, sempre com o selo "Exemplo fictício".
+- A tela de rotação pergunta só as culturas. Como a UC-10 exige um período por safra, a proposta leva meses nominais em sequência a partir do mês atual; eles só ordenam as duas etapas e não são calendário de plantio.
+- O clima mostrado em `/dados` é a média histórica regional da NASA POWER, não medição da parcela.
+
+# Etapas em detalhe
+
+A rota `/etapas` lista os formulários completos de cada etapa (`/localizacao`, `/solo`, `/regime-hidrico`, `/historico`, `/culturas-possiveis`, `/cobertura`, `/rotacao`, `/restricoes`, `/alternativas` e `/comparar`). O fluxo principal grava os rascunhos com as mesmas chaves, então as duas entradas enxergam os mesmos dados.
