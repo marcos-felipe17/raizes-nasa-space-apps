@@ -20,6 +20,11 @@ from .history import (
     CultivationHistoryValidation,
     validate_cultivation_history,
 )
+from .rotation_proposal import (
+    RotationProposalInput,
+    RotationProposalValidation,
+    validate_rotation_proposal,
+)
 from .profile import AreaProfileInput, AreaProfileValidation, validate_area_profile
 from .soil import SoilInput, SoilValidation, validate_soil
 
@@ -90,3 +95,8 @@ def resolve_area_location(payload: LocationInput) -> LocationResult:
 @app.post('/api/v1/areas/coverage', response_model=CoverageResult)
 def get_area_coverage(payload: CoverageInput) -> CoverageResult:
     return check_coverage(payload)
+
+
+@app.post('/api/v1/areas/rotation-proposal/validate', response_model=RotationProposalValidation)
+def validate_area_rotation_proposal(payload: RotationProposalInput) -> RotationProposalValidation:
+    return validate_rotation_proposal(payload)
