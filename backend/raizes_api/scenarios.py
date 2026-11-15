@@ -4,8 +4,9 @@ import json
 from pathlib import Path
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+from .candidate_crops import CandidateCropsInput, CandidateCropsStatus
 from .history import CultivationHistoryInput
 from .profile import WaterRegime
 from .soil import SoilInput
@@ -26,6 +27,14 @@ class Scenario(BaseModel):
     possible_crops: list[str]
     priority: str | None
     simulated: Literal[True]
+
+    @field_validator("possible_crops")
+    @classmethod
+    def validate_possible_crops(cls, value: list[str]) -> list[str]:
+        """Apply the same crop-name rules to simulated options."""
+        return CandidateCropsInput(
+            status=CandidateCropsStatus.KNOWN, crops=value
+        ).crops
 
 
 def list_scenarios(fixture_path: Path = FIXTURE_PATH) -> list[Scenario]:

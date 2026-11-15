@@ -1,6 +1,6 @@
 # API do Raízes
 
-API FastAPI para explorar cenários simulados (US-01) e validar solo, regime hídrico e histórico de uma área de cultivo (UC-03 a UC-05).
+API FastAPI para explorar cenários simulados (US-01) e validar solo, regime hídrico e histórico de uma área de cultivo (UC-03 a UC-06).
 
 ## Executar
 
@@ -18,6 +18,8 @@ O endpoint `POST /api/v1/areas/profile/validate` recebe o solo e um regime hídr
 O endpoint `POST /api/v1/areas/history/validate` recebe uma lista cronológica de culturas e meses de início/fim, preservando a sequência validada.
 
 Os endpoints `GET /api/scenarios` e `GET /api/scenarios/{id}` expõem apenas fixtures identificadas como simuladas. Um ID inexistente retorna 404.
+
+O endpoint `POST /api/v1/areas/candidate-crops/validate` registra culturas candidatas ou `unknown` e devolve `eligibility_evaluated: false`. A lista informada ainda não passou por verificação agronômica.
 
 ## Testar
 

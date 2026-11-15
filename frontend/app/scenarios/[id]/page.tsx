@@ -47,7 +47,7 @@ export default function ScenarioDetailPage() {
             <div><dt>Solo</dt><dd>{scenario.soil.status === "unknown" ? "não informado" : scenario.soil.classification || scenario.soil.description}</dd></div>
             <div><dt>Regime hídrico</dt><dd>{scenario.water_regime === "rainfed" ? "Sequeiro" : "Irrigado"}</dd></div>
             <div><dt>Prioridade</dt><dd>{scenario.priority || "não informado"}</dd></div>
-            <div><dt>Culturas possíveis</dt><dd>{scenario.possible_crops.length ? scenario.possible_crops.join(", ") : "não informado"}</dd></div>
+            <div><dt>Culturas candidatas</dt><dd>{scenario.possible_crops.length ? scenario.possible_crops.join(", ") : "não informado"}</dd></div>
           </dl>
           <section className="scenario-history">
             <h2>Histórico de cultivo</h2>

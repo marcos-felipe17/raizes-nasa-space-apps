@@ -2,6 +2,11 @@
 
 from fastapi import FastAPI, HTTPException
 
+from .candidate_crops import (
+    CandidateCropsInput,
+    CandidateCropsValidation,
+    validate_candidate_crops,
+)
 from .history import (
     CultivationHistoryInput,
     CultivationHistoryValidation,
@@ -44,6 +49,15 @@ def validate_profile(payload: AreaProfileInput) -> AreaProfileValidation:
 def validate_history(payload: CultivationHistoryInput) -> CultivationHistoryValidation:
     """Validate the ordered cultivation history for UC-05."""
     return validate_cultivation_history(payload)
+
+
+@app.post(
+    "/api/v1/areas/candidate-crops/validate",
+    response_model=CandidateCropsValidation,
+)
+def validate_area_candidate_crops(payload: CandidateCropsInput) -> CandidateCropsValidation:
+    """Validate farmer-provided options without asserting crop eligibility."""
+    return validate_candidate_crops(payload)
 
 
 @app.get("/api/scenarios", response_model=list[Scenario])

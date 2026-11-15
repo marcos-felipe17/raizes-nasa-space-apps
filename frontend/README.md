@@ -23,3 +23,7 @@ A página `/historico` registra culturas e meses de início e fim em ordem crono
 # US-01
 
 A página inicial lista cenários simulados. O detalhe fica em `/scenarios/[id]`. As consultas são repassadas à API FastAPI por rotas do Next.js; a URL da API continua configurada por `RAIZES_API_URL`.
+
+# UC-06
+
+A página `/culturas-possiveis` registra as culturas candidatas do agricultor ou a lacuna `ainda não sei`. A API valida os nomes sem afirmar elegibilidade, e a resposta fica como rascunho local até a integração com a UC-02.
