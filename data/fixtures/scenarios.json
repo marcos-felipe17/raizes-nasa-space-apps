@@ -1,0 +1,80 @@
+[
+  {
+    "id": "cerrado-sequeiro-01",
+    "nome": "Talhão A — Transição em Grãos",
+    "regiao_aproximada": "Sudoeste de Goiás (Cerrado)",
+    "solo": "Latossolo Vermelho argiloso",
+    "regime_hidrico": "sequeiro",
+    "historico": [
+      {
+        "cultura": "Soja",
+        "periodo": "Safra 2024/2025"
+      },
+      {
+        "cultura": "Milho 2ª safra",
+        "periodo": "Safrinha 2025"
+      }
+    ],
+    "culturas_possiveis": [
+      "Soja",
+      "Sorgo",
+      "Braquiária (cobertura)",
+      "Crotalária"
+    ],
+    "prioridade": "Cobertura de solo e retenção de umidade na entressafra",
+    "simulado": true
+  },
+  {
+    "id": "oeste-bahia-irrigado-02",
+    "nome": "Pivô Central 3 — Rotação Intensiva",
+    "regiao_aproximada": "Oeste da Bahia (MATOPIBA)",
+    "solo": "Latossolo Amarelo franco-arenoso",
+    "regime_hidrico": "irrigado",
+    "historico": [
+      {
+        "cultura": "Algodão",
+        "periodo": "Safra 2023/2024"
+      },
+      {
+        "cultura": "Soja",
+        "periodo": "Safra 2024/2025"
+      },
+      {
+        "cultura": "Feijão irrigado",
+        "periodo": "Inverno 2025"
+      }
+    ],
+    "culturas_possiveis": [
+      "Milho",
+      "Trigo irrigado",
+      "Gergelim",
+      "Milheto"
+    ],
+    "prioridade": "Quebra de ciclo de nematoides e diversificação sob pivô",
+    "simulado": true
+  },
+  {
+    "id": "sul-parana-parcial-03",
+    "nome": "Gleba Encosta — Dados Parciais",
+    "regiao_aproximada": "Campos Gerais do Paraná",
+    "solo": null,
+    "regime_hidrico": "sequeiro",
+    "historico": [
+      {
+        "cultura": "Aveia preta",
+        "periodo": "Inverno 2024"
+      },
+      {
+        "cultura": "Soja",
+        "periodo": null
+      }
+    ],
+    "culturas_possiveis": [
+      "Trigo",
+      "Nabo forrageiro",
+      "Centeio"
+    ],
+    "prioridade": null,
+    "simulado": true
+  }
+]
