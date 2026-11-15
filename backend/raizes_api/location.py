@@ -7,7 +7,6 @@ do ZARC, e a resposta carrega essa informação explicitamente.
 from __future__ import annotations
 
 import json
-import socket
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -72,7 +71,9 @@ def _get_json(url: str) -> Any:
         return json.loads(response.read().decode("utf-8"))
 
 
-_NETWORK_ERRORS = (urllib.error.URLError, socket.timeout, TimeoutError, ValueError)
+# OSError cobre URLError, HTTPError, timeout e queda de conexão; ValueError cobre JSON inválido.
+_NETWORK_ERRORS = (OSError, ValueError)
+_SHAPE_ERRORS = (KeyError, IndexError, TypeError, ValueError, AttributeError)
 
 
 def geocode(place: str, get_json: GetJson = _get_json) -> Coordinates:
@@ -85,12 +86,15 @@ def geocode(place: str, get_json: GetJson = _get_json) -> Coordinates:
     if not hits:
         raise LocationNotFound(place)
 
-    hit = hits[0]
-    return Coordinates(
-        lat=float(hit["lat"]),
-        lon=float(hit["lon"]),
-        display_name=str(hit["display_name"]),
-    )
+    try:
+        hit = hits[0]
+        return Coordinates(
+            lat=float(hit["lat"]),
+            lon=float(hit["lon"]),
+            display_name=str(hit["display_name"]),
+        )
+    except _SHAPE_ERRORS as exc:
+        raise UpstreamError("resposta inesperada da geocodificação") from exc
 
 
 def _clean_series(series: dict[str, Any]) -> dict[str, float | None]:
@@ -120,22 +124,25 @@ def climate_for(coords: Coordinates, get_json: GetJson = _get_json) -> ClimateCo
             provenance=provenance,
         )
 
-    parameters = (data.get("properties") or {}).get("parameter") or {}
-    temperature = parameters.get("T2M")
-    precipitation = parameters.get("PRECTOTCORR")
-    if not temperature or not precipitation:
-        return ClimateContext(
-            status="unavailable",
-            reason="resposta da NASA POWER sem os parâmetros esperados",
-            provenance=provenance,
-        )
-
-    return ClimateContext(
-        status="ok",
-        temperature_2m_c=_clean_series(temperature),
-        precipitation_mm_dia=_clean_series(precipitation),
+    unexpected = ClimateContext(
+        status="unavailable",
+        reason="resposta da NASA POWER sem os parâmetros esperados",
         provenance=provenance,
     )
+    try:
+        parameters = (data.get("properties") or {}).get("parameter") or {}
+        temperature = parameters.get("T2M")
+        precipitation = parameters.get("PRECTOTCORR")
+        if not temperature or not precipitation:
+            return unexpected
+        return ClimateContext(
+            status="ok",
+            temperature_2m_c=_clean_series(temperature),
+            precipitation_mm_dia=_clean_series(precipitation),
+            provenance=provenance,
+        )
+    except _SHAPE_ERRORS:
+        return unexpected
 
 
 def resolve_location(payload: LocationInput, get_json: GetJson = _get_json) -> LocationResult:
