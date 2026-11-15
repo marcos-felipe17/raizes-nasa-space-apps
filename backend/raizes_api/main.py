@@ -3,6 +3,7 @@
 from fastapi import FastAPI, HTTPException
 
 from .coverage import CoverageInput, CoverageResult, check_coverage
+from .gaps import GapsInput, GapsResult, identify_gaps
 from .candidate_crops import (
     CandidateCropsInput,
     CandidateCropsValidation,
@@ -100,3 +101,10 @@ def get_area_coverage(payload: CoverageInput) -> CoverageResult:
 @app.post('/api/v1/areas/rotation-proposal/validate', response_model=RotationProposalValidation)
 def validate_area_rotation_proposal(payload: RotationProposalInput) -> RotationProposalValidation:
     return validate_rotation_proposal(payload)
+
+
+@app.post("/api/v1/areas/gaps", response_model=GapsResult)
+def check_area_gaps(payload: GapsInput | None = None) -> GapsResult:
+    """Identify data gaps for UC-12 without asserting crop eligibility or R."""
+    return identify_gaps(payload)
+

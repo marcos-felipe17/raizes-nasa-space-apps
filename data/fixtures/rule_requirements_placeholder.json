@@ -1,0 +1,80 @@
+{
+  "simulado": true,
+  "rotulo": "PLACEHOLDER",
+  "fonte": "PLACEHOLDER",
+  "nota": "Exigências genéricas de dados para a UC-12. Regras regionais ainda não auditadas (ADR-0003); não contém regras agronômicas específicas de cultura.",
+  "covered_crops": [],
+  "evaluations": [
+    {
+      "rule_id": "soil_requirement",
+      "rule_name": "Condições de solo da área de cultivo",
+      "required_code": "soil",
+      "missing_data": "Descrição ou classificação do solo da área de cultivo",
+      "expected_source": "farmer_input",
+      "reason": "Sem dados conhecidos do solo da área de cultivo, a avaliação que depende do solo fica inconclusiva.",
+      "source": "PLACEHOLDER"
+    },
+    {
+      "rule_id": "water_regime_requirement",
+      "rule_name": "Regime hídrico da área de cultivo",
+      "required_code": "water_regime",
+      "missing_data": "Regime hídrico (sequeiro ou irrigado) da área de cultivo",
+      "expected_source": "farmer_input",
+      "reason": "Sem definição do regime hídrico da área de cultivo, a avaliação hídrica fica inconclusiva.",
+      "source": "PLACEHOLDER"
+    },
+    {
+      "rule_id": "history_requirement",
+      "rule_name": "Histórico cronológico da área de cultivo",
+      "required_code": "history",
+      "missing_data": "Histórico de cultivos recentes da área de cultivo",
+      "expected_source": "farmer_input",
+      "reason": "Sem o histórico recente da área de cultivo, a verificação da sequência anterior fica inconclusiva.",
+      "source": "PLACEHOLDER"
+    },
+    {
+      "rule_id": "candidate_crops_requirement",
+      "rule_name": "Culturas candidatas da área de cultivo",
+      "required_code": "candidate_crops",
+      "missing_data": "Lista de culturas candidatas para a área de cultivo",
+      "expected_source": "farmer_input",
+      "reason": "Sem culturas candidatas conhecidas para a área de cultivo, o escopo de alternativas para explorar fica inconclusivo.",
+      "source": "PLACEHOLDER"
+    },
+    {
+      "rule_id": "temperature_requirement",
+      "rule_name": "Contexto climático de temperatura (T2M)",
+      "required_code": "temperature",
+      "missing_data": "Climatologia de temperatura do ar (T2M)",
+      "expected_source": "nasa_earth_observation",
+      "reason": "Sem série climática de temperatura disponível para o ponto, a verificação de contexto térmico fica inconclusiva.",
+      "source": "PLACEHOLDER"
+    },
+    {
+      "rule_id": "precipitation_requirement",
+      "rule_name": "Contexto climático de precipitação (PRECTOTCORR)",
+      "required_code": "precipitation",
+      "missing_data": "Climatologia de precipitação (PRECTOTCORR)",
+      "expected_source": "nasa_earth_observation",
+      "reason": "Sem série climática de precipitação disponível para o ponto, a verificação de contexto pluvial fica inconclusiva.",
+      "source": "PLACEHOLDER"
+    },
+    {
+      "rule_id": "rotation_proposal_requirement",
+      "rule_name": "Sequência da proposta de rotação",
+      "required_code": "rotation_proposal",
+      "missing_data": "Proposta de rotação com culturas e períodos",
+      "expected_source": "farmer_input",
+      "reason": "Sem uma sequência proposta de safras para a área de cultivo, não há etapas para avaliar.",
+      "source": "PLACEHOLDER"
+    }
+  ],
+  "regional_rules_placeholder": {
+    "code": "regional_rules",
+    "rule_id": "regional_rule_coverage_placeholder",
+    "rule_name": "Cobertura de regras agrícolas regionais [PLACEHOLDER]",
+    "expected_source": "regional_agricultural_rule",
+    "source": "PLACEHOLDER",
+    "notice": "Regras regionais ainda não auditadas (ADR-0003)"
+  }
+}
