@@ -1,6 +1,6 @@
 """FastAPI entry point for the Raízes area profile."""
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 
 from .history import (
     CultivationHistoryInput,
@@ -8,6 +8,7 @@ from .history import (
     validate_cultivation_history,
 )
 from .profile import AreaProfileInput, AreaProfileValidation, validate_area_profile
+from .scenarios import Scenario, get_scenario, list_scenarios
 from .soil import SoilInput, SoilValidation, validate_soil
 
 app = FastAPI(title="Raízes API", version="0.1.0")
@@ -43,3 +44,16 @@ def validate_profile(payload: AreaProfileInput) -> AreaProfileValidation:
 def validate_history(payload: CultivationHistoryInput) -> CultivationHistoryValidation:
     """Validate the ordered cultivation history for UC-05."""
     return validate_cultivation_history(payload)
+
+
+@app.get("/api/scenarios", response_model=list[Scenario])
+def list_simulated_scenarios() -> list[Scenario]:
+    return list_scenarios()
+
+
+@app.get("/api/scenarios/{scenario_id}", response_model=Scenario)
+def get_simulated_scenario(scenario_id: str) -> Scenario:
+    scenario = get_scenario(scenario_id)
+    if scenario is None:
+        raise HTTPException(status_code=404, detail="Cenário não encontrado")
+    return scenario

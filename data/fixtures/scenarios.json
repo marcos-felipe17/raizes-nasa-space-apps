@@ -1,80 +1,42 @@
 [
   {
     "id": "cerrado-sequeiro-01",
-    "nome": "Talhão A — Transição em Grãos",
-    "regiao_aproximada": "Sudoeste de Goiás (Cerrado)",
-    "solo": "Latossolo Vermelho argiloso",
-    "regime_hidrico": "sequeiro",
-    "historico": [
-      {
-        "cultura": "Soja",
-        "periodo": "Safra 2024/2025"
-      },
-      {
-        "cultura": "Milho 2ª safra",
-        "periodo": "Safrinha 2025"
-      }
-    ],
-    "culturas_possiveis": [
-      "Soja",
-      "Sorgo",
-      "Braquiária (cobertura)",
-      "Crotalária"
-    ],
-    "prioridade": "Cobertura de solo e retenção de umidade na entressafra",
-    "simulado": true
+    "name": "Talhão A — Grãos no Cerrado",
+    "approximate_region": "Sudoeste de Goiás, Brasil",
+    "soil": {"status": "known", "description": "Latossolo argiloso", "source": "external", "source_reference": "Fixture fictícia da PoC"},
+    "water_regime": "rainfed",
+    "history": {"periods": [
+      {"crop": "Soja", "start_month": "2024-10", "end_month": "2025-02"},
+      {"crop": "Milho", "start_month": "2025-03", "end_month": "2025-07"}
+    ]},
+    "possible_crops": ["Soja", "Sorgo", "Braquiária", "Crotalária"],
+    "priority": "Cobertura do solo na entressafra",
+    "simulated": true
   },
   {
-    "id": "oeste-bahia-irrigado-02",
-    "nome": "Pivô Central 3 — Rotação Intensiva",
-    "regiao_aproximada": "Oeste da Bahia (MATOPIBA)",
-    "solo": "Latossolo Amarelo franco-arenoso",
-    "regime_hidrico": "irrigado",
-    "historico": [
-      {
-        "cultura": "Algodão",
-        "periodo": "Safra 2023/2024"
-      },
-      {
-        "cultura": "Soja",
-        "periodo": "Safra 2024/2025"
-      },
-      {
-        "cultura": "Feijão irrigado",
-        "periodo": "Inverno 2025"
-      }
-    ],
-    "culturas_possiveis": [
-      "Milho",
-      "Trigo irrigado",
-      "Gergelim",
-      "Milheto"
-    ],
-    "prioridade": "Quebra de ciclo de nematoides e diversificação sob pivô",
-    "simulado": true
+    "id": "bahia-irrigado-02",
+    "name": "Pivô 3 — Rotação intensiva",
+    "approximate_region": "Oeste da Bahia, Brasil",
+    "soil": {"status": "known", "description": "Latossolo franco-arenoso", "source": "external", "source_reference": "Fixture fictícia da PoC"},
+    "water_regime": "irrigated",
+    "history": {"periods": [
+      {"crop": "Algodão", "start_month": "2023-10", "end_month": "2024-04"},
+      {"crop": "Soja", "start_month": "2024-10", "end_month": "2025-02"},
+      {"crop": "Feijão", "start_month": "2025-05", "end_month": "2025-08"}
+    ]},
+    "possible_crops": ["Milho", "Trigo", "Gergelim", "Milheto"],
+    "priority": "Diversificação das culturas",
+    "simulated": true
   },
   {
-    "id": "sul-parana-parcial-03",
-    "nome": "Gleba Encosta — Dados Parciais",
-    "regiao_aproximada": "Campos Gerais do Paraná",
-    "solo": null,
-    "regime_hidrico": "sequeiro",
-    "historico": [
-      {
-        "cultura": "Aveia preta",
-        "periodo": "Inverno 2024"
-      },
-      {
-        "cultura": "Soja",
-        "periodo": null
-      }
-    ],
-    "culturas_possiveis": [
-      "Trigo",
-      "Nabo forrageiro",
-      "Centeio"
-    ],
-    "prioridade": null,
-    "simulado": true
+    "id": "parana-parcial-03",
+    "name": "Gleba Encosta — Dados parciais",
+    "approximate_region": "Campos Gerais do Paraná, Brasil",
+    "soil": {"status": "unknown"},
+    "water_regime": "rainfed",
+    "history": null,
+    "possible_crops": ["Trigo", "Nabo forrageiro", "Centeio"],
+    "priority": null,
+    "simulated": true
   }
 ]
