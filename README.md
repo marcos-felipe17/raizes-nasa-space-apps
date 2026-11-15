@@ -5,87 +5,24 @@ Protótipo de apoio à decisão para explorar rotações de culturas com dados d
 
 ## Estrutura
 
-- `src/interface/`: entrada e apresentação para o usuário (Next.js App Router).
-- `src/api/`: exposição HTTP da aplicação (FastAPI em `src/api/main.py`).
-- `src/application/`: casos de uso e coordenação do fluxo (`src/application/list_scenarios.py`).
-- `src/domain/`: regras, modelos e estados da análise (`src/domain/scenario.py`).
-- `src/infrastructure/`: leitura de fixtures e conectores de dados (`src/infrastructure/scenario_repository.py`).
-- `data/fixtures/`: cenários fictícios e dados de demonstração identificados (`data/fixtures/scenarios.json`).
+- `src/interface/`: entrada e apresentação para o usuário.
+- `src/application/`: casos de uso e coordenação do fluxo.
+- `src/domain/`: regras, estados da análise e cálculo dos indicadores.
+- `src/infrastructure/`: conectores de dados, persistência e cache.
+- `data/fixtures/`: cenários fictícios e dados de demonstração identificados.
 - `docs/adr/`: registros das decisões de arquitetura.
-- `docs/stories/`: histórias de usuário e critérios de aceite.
-- `tests/`: testes automatizados (`pytest`).
+- `tests/`: testes de regras e fluxos quando houver implementação.
 
-As pastas Python (`src/`, `src/domain/`, `src/application/`, `src/infrastructure/`, `src/api/` e `tests/`) possuem `__init__.py` para funcionar como pacotes importáveis a partir da raiz do repositório.
+As pastas representam responsabilidades lógicas. A implementação pode começar como uma única aplicação; esta estrutura não exige serviços ou deploys separados.
 
 ## Estado do projeto
 
-A arquitetura conceitual está registrada em [ADR-0001](docs/adr/0001-arquitetura-do-raizes.md). Atualmente está implementada a [US-01 — Selecionar cenário](docs/stories/US-01-selecionar-cenario.md).
+A arquitetura conceitual está registrada em [ADR-0001](docs/adr/0001-arquitetura-do-raizes.md). A unidade de análise e os estudos de caso da PoC estão registrados em [ADR-0002](docs/adr/0002-unidade-e-casos-da-poc.md). O método de análise e seus limites de confiabilidade estão em [ADR-0003](docs/adr/0003-metodo-de-analise-e-confiabilidade.md). A elicitação de requisitos e as user cards são mantidas no Notion. A escolha da stack e a validação das fontes regionais ainda estão abertas.
+## Implementação
 
-## Versões e Dependências
+- `backend/`: API FastAPI com os contratos da UC-03, UC-04 e UC-05. Veja [como executar](backend/README.md).
+- `frontend/`: telas Next.js da UC-03 em `/solo`, UC-04 em `/regime-hidrico` e UC-05 em `/historico`. Veja [como executar](frontend/README.md).
 
-Ambiente verificado nesta máquina:
-- **Python:** `3.14.4`
-- **Node.js:** `v26.13.1` (npm `11.20.0`)
+A escolha da stack e o escopo da UC-03 estão registrados em [ADR-0004](docs/adr/0004-stack-da-poc.md). A modelagem do regime hídrico está em [ADR-0005](docs/adr/0005-regime-hidrico-da-area.md). O rascunho local do solo está em [ADR-0006](docs/adr/0006-rascunho-local-do-solo.md).
 
-### Dependências Backend (`requirements.txt`)
-- `fastapi==0.115.12`
-- `uvicorn==0.34.0`
-- `pytest==8.3.5`
-- `httpx==0.28.1`
-
-### Dependências Frontend (`src/interface/package.json`)
-- `next`: `15.5.29`
-- `react`: `19.3.1`
-- `react-dom`: `19.3.1`
-
-> **Nota:** `npm audit` mostra 2 avisos residuais (`postcss`, dependência indireta do Next, usada na compilação), sem vulnerabilidades críticas. Revisar antes de qualquer deploy.
-
-## Como rodar (em máquina limpa)
-
-### 1. Configurar variáveis de ambiente (opcional — já possuem valores padrão para desenvolvimento local)
-
-Na raiz do projeto (variáveis do backend):
-```powershell
-Copy-Item .env.example .env
-```
-
-Na pasta do frontend (`src/interface/`):
-```powershell
-Copy-Item src/interface/.env.example src/interface/.env.local
-```
-
-### 2. Backend (FastAPI) e Testes (`pytest`)
-
-Na **raiz do repositório**:
-
-```powershell
-# Criar ambiente virtual Python
-python -m venv .venv
-
-# Instalar dependências
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
-
-# Rodar os testes automatizados (pytest usa pytest.ini com pythonpath = .)
-.\.venv\Scripts\python.exe -m pytest
-
-# Subir o servidor FastAPI em http://localhost:8000
-.\.venv\Scripts\python.exe -m uvicorn src.api.main:app --reload --port 8000
-```
-
-*(Em Linux/macOS, substitua `.\.venv\Scripts\python.exe` por `./.venv/bin/python`).*
-
-Endpoints disponíveis na US-01:
-- `GET http://localhost:8000/api/scenarios`
-- `GET http://localhost:8000/api/scenarios/{id}`
-
-### 3. Frontend (Next.js)
-
-Em outro terminal, a partir da **raiz do repositório**:
-
-```powershell
-cd src/interface
-npm install
-npm run dev
-```
-
-Acesse a aplicação no navegador em: `http://localhost:3000`
+O histórico de cultivo e sua granularidade estão em [ADR-0007](docs/adr/0007-historico-de-cultivo.md).
