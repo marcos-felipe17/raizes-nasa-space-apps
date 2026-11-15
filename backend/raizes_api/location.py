@@ -1,7 +1,7 @@
 """UC-02: localização da área, com contexto climático da NASA POWER.
 
-Os dados climáticos são contexto. Eles não alteram o resultado das regras
-do ZARC, e a resposta carrega essa informação explicitamente.
+Os dados climáticos são contexto. Eles não alteram o resultado de nenhuma
+regra agronômica, e a resposta carrega essa informação explicitamente.
 """
 
 from __future__ import annotations
@@ -20,7 +20,10 @@ USER_AGENT = "RaizesSpaceApps-Prototype/0.1"
 TIMEOUT_S = 10
 POWER_FILL_VALUE = -999
 
-NASA_NOTE = "Dados climáticos da NASA POWER são contexto e não alteram o resultado do ZARC."
+NASA_NOTE = (
+    "Dados climáticos da NASA POWER são contexto e não alteram o resultado "
+    "de nenhuma regra agronômica."
+)
 
 GetJson = Callable[[str], Any]
 

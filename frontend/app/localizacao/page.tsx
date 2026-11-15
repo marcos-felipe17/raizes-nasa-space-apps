@@ -19,7 +19,7 @@ export default function LocationPage() {
         <h1 id="page-title">Onde fica a área?</h1>
         <p>
           Informe o município e a UF. O contexto climático da NASA POWER é só referência:
-          ele não muda o resultado das regras do ZARC.
+          ele não muda o resultado de nenhuma regra agronômica.
         </p>
       </section>
       <LocationForm />
