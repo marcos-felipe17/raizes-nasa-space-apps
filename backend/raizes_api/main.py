@@ -1,7 +1,14 @@
 """FastAPI entry point for the Raízes area profile."""
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 
+from .location import (
+    LocationInput,
+    LocationNotFound,
+    LocationResult,
+    UpstreamError,
+    resolve_location,
+)
 from .history import (
     CultivationHistoryInput,
     CultivationHistoryValidation,
@@ -43,3 +50,23 @@ def validate_profile(payload: AreaProfileInput) -> AreaProfileValidation:
 def validate_history(payload: CultivationHistoryInput) -> CultivationHistoryValidation:
     """Validate the ordered cultivation history for UC-05."""
     return validate_cultivation_history(payload)
+
+
+@app.post(
+    "/api/v1/areas/location/resolve",
+    response_model=LocationResult,
+)
+def resolve_area_location(payload: LocationInput) -> LocationResult:
+    """Resolve o local informado e devolve contexto climático da NASA POWER (UC-02)."""
+    try:
+        return resolve_location(payload)
+    except LocationNotFound as exc:
+        raise HTTPException(
+            status_code=404,
+            detail="Local não encontrado. Inclua o município e a UF, por exemplo: Petrolina, PE.",
+        ) from exc
+    except UpstreamError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="Serviço de localização indisponível agora. Tente novamente.",
+        ) from exc
