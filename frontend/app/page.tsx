@@ -1,45 +1,28 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { Botao, Espaco, LinkAcao, Marca, Tela } from "./_ui/ui";
 
 export const metadata: Metadata = {
-  title: "Raízes | Perfil da área",
-  description: "Etapas para descrever uma área de cultivo e conferir os dados disponíveis.",
+  title: "Raízes",
+  description: "Planeje a próxima safra com dados de satélite da NASA e o que você sabe da sua terra.",
 };
 
-const steps = [
-  { href: "/localizacao", title: "Localização", text: "Município da área e contexto climático da NASA POWER." },
-  { href: "/solo", title: "Solo", text: "O que se sabe sobre o solo e de onde vem a informação." },
-  { href: "/regime-hidrico", title: "Regime hídrico", text: "Sequeiro ou irrigado." },
-  { href: "/historico", title: "Histórico de cultivo", text: "Culturas anteriores, em ordem." },
-  { href: "/culturas-possiveis", title: "Culturas candidatas", text: "Opções que você considera plantar." },
-  { href: "/cobertura", title: "Cobertura de dados", text: "O que está disponível, ausente ou não verificado." },
-];
-
-export default function HomePage() {
+export default function InicioPage() {
   return (
-    <main className="page-shell">
-      <header className="page-header">
-        <span className="brand">RAÍZES</span>
-        <span className="step">Perfil da área</span>
-      </header>
-      <section className="intro" aria-labelledby="page-title">
-        <p className="eyebrow">CONHECER A ÁREA</p>
-        <h1 id="page-title">Descreva a área antes de comparar rotações</h1>
-        <p>
-          Cada etapa registra um dado da área e mostra de onde ele vem. Nesta versão o
-          protótipo ainda não avalia nem recomenda rotações.
+    <Tela>
+      <Marca tamanho="g" />
+      <Espaco />
+      <div className="rz-mensagem">
+        <h1 className="rz-titulo rz-titulo--capa">Planeje a próxima safra com o céu a seu favor.</h1>
+        <p className="rz-texto">
+          Junte o que você sabe da sua terra com dados de satélite da NASA e veja quais rotações fazem sentido.
         </p>
-      </section>
-      <section className="summary-card" aria-label="Etapas">
-        <ol className="history-summary">
-          {steps.map((step) => (
-            <li key={step.href}>
-              <strong><Link href={step.href}>{step.title}</Link></strong>
-              <span>{step.text}</span>
-            </li>
-          ))}
-        </ol>
-      </section>
-    </main>
+      </div>
+      <Espaco />
+      <div className="rz-acoes">
+        <Botao href="/area">Analisar minha área</Botao>
+        <LinkAcao href="/exemplo">Ver um exemplo</LinkAcao>
+      </div>
+      <p className="rz-rodape">Feito em Recife · NASA Space Apps 2026</p>
+    </Tela>
   );
 }
