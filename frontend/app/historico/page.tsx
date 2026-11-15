@@ -23,7 +23,7 @@ export default function HistoryPage() {
         </p>
       </section>
       <HistoryForm />
-      <p className="page-link"><Link href="/regime-hidrico">Voltar ao regime hídrico</Link></p>
+      <p className="page-link"><Link href="/regime-hidrico">Voltar ao regime hídrico</Link> · <Link href="/culturas-possiveis">Informar culturas →</Link></p>
     </main>
   );
 }

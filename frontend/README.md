@@ -19,3 +19,7 @@ O perfil validado fica temporariamente no armazenamento local deste navegador.
 # UC-05
 
 A página `/historico` registra culturas e meses de início e fim em ordem cronológica. A resposta validada pela API fica como rascunho neste navegador até a integração com a UC-02.
+
+# UC-06
+
+A página `/culturas-possiveis` registra as culturas candidatas do agricultor ou a lacuna `ainda não sei`. A API valida os nomes sem afirmar elegibilidade, e a resposta fica como rascunho local até a integração com a UC-02.
