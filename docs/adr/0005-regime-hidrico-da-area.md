@@ -20,3 +20,9 @@ A UC-04 pede que o agricultor informe se o cultivo é de sequeiro ou irrigado, p
 - A UC-04 acrescenta um perfil composto por solo e regime hídrico, sem alterar a rota de solo da UC-03.
 - O formulário Next.js deve apresentar rótulos localizados, mas enviar os valores estáveis da API.
 - Este contrato valida entradas; persistência e comparação agronômica serão implementadas em cards posteriores.
+
+## Implementação da interface
+
+- A página `/regime-hidrico` exige escolha explícita entre sequeiro e irrigado e mostra o regime no perfil validado.
+- A validação usa o rascunho de solo da UC-03 quando disponível. Sem ele, envia solo desconhecido e preserva a lacuna no resultado.
+- Até a integração com o cadastro da área da UC-02, a última resposta validada fica como rascunho local do navegador, sem persistência no servidor.

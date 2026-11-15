@@ -21,6 +21,6 @@ A arquitetura conceitual está registrada em [ADR-0001](docs/adr/0001-arquitetur
 ## Implementação
 
 - `backend/`: API FastAPI com os contratos da UC-03 e UC-04. Veja [como executar](backend/README.md).
-- `frontend/`: tela Next.js da UC-03 em `/solo`. Veja [como executar](frontend/README.md).
+- `frontend/`: telas Next.js da UC-03 em `/solo` e UC-04 em `/regime-hidrico`. Veja [como executar](frontend/README.md).
 
 A escolha da stack e o escopo da UC-03 estão registrados em [ADR-0004](docs/adr/0004-stack-da-poc.md). A modelagem do regime hídrico está em [ADR-0005](docs/adr/0005-regime-hidrico-da-area.md). O rascunho local do solo está em [ADR-0006](docs/adr/0006-rascunho-local-do-solo.md).
