@@ -7,7 +7,7 @@ Base FastAPI para informar localização, solo, regime hídrico, histórico e cu
 No diretório `backend`:
 
 ```powershell
-python -m pip install -e .
+python -m pip install -e ".[dev]"
 python -m uvicorn raizes_api.main:app --reload
 ```
 

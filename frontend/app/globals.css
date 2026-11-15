@@ -64,3 +64,14 @@ h1 { font-size: clamp(32px, 5vw, 53px); line-height: 1.1; letter-spacing: -.035e
 .notice { background: #fff6dd; border-left: 3px solid #d7a32f; padding: 12px; color: #57451c !important; border-radius: 4px; }
 @media (max-width: 720px) { .page-shell { padding: 0 18px 40px; } .intro { padding: 44px 0 30px; } .content-grid { grid-template-columns: 1fr; } .form-card, .summary-card { padding: 23px; } }
 @media (max-width: 420px) { .period-months { grid-template-columns: 1fr; } }
+.coverage-coordinates { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 20px; }
+.coverage-list { list-style: none; margin: 20px 0; padding: 0; }
+.coverage-list li { border-top: 1px solid var(--line); padding: 17px 0; }
+.coverage-list strong, .coverage-list small { display: block; margin-top: 6px; }
+.coverage-list small { color: var(--muted); }
+.coverage-list p { margin: 8px 0 0; }
+.coverage-status { display: inline-block; border-radius: 999px; padding: 4px 9px; font-size: 12px; font-weight: 700; }
+.coverage-available { color: #155438; background: #e0f3e7; }
+.coverage-missing { color: #804414; background: #fff0df; }
+.coverage-unverified { color: #43556b; background: #e9eef4; }
+@media (max-width: 420px) { .coverage-coordinates { grid-template-columns: 1fr; } }

@@ -2,6 +2,7 @@
 
 from fastapi import FastAPI, HTTPException
 
+from .coverage import CoverageInput, CoverageResult, check_coverage
 from .candidate_crops import (
     CandidateCropsInput,
     CandidateCropsValidation,
@@ -84,3 +85,8 @@ def resolve_area_location(payload: LocationInput) -> LocationResult:
             status_code=503,
             detail="Serviço de localização indisponível agora. Tente novamente.",
         ) from exc
+
+
+@app.post('/api/v1/areas/coverage', response_model=CoverageResult)
+def get_area_coverage(payload: CoverageInput) -> CoverageResult:
+    return check_coverage(payload)
