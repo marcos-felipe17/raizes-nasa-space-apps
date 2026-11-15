@@ -17,6 +17,12 @@ type Option = {
   adequacy: "unavailable";
 };
 type Result = { status: "ready" | "limited"; reason: string; options: Option[]; missing_for_comparison: string[] };
+type Priority = "soil_health" | "water_conservation" | "climate_resilience" | "income";
+type PrioritizationResult = {
+  priority: Priority; ranking_status: "unavailable"; order_changed: null;
+  criteria_used_for_ranking: string[]; missing_for_ranking: string[];
+  explanation: string; comparison: Result;
+};
 
 function stored(key: string): unknown {
   try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : null; }
@@ -55,6 +61,14 @@ function isResult(value: unknown): value is Result {
       typeof item.distinct_crops === "boolean" && item.adequacy === "unavailable");
 }
 
+function isPrioritizationResult(value: unknown): value is PrioritizationResult {
+  if (!value || typeof value !== "object") return false;
+  const data = value as Partial<PrioritizationResult>;
+  return data.ranking_status === "unavailable" && data.order_changed === null &&
+    typeof data.explanation === "string" && Array.isArray(data.criteria_used_for_ranking) &&
+    Array.isArray(data.missing_for_ranking) && isResult(data.comparison);
+}
+
 const candidateText = {
   all_listed: "Ambas na sua lista",
   some_unlisted: "Há cultura fora da sua lista",
@@ -66,12 +80,19 @@ export default function ComparisonExplorer() {
   const [result, setResult] = useState<Result | null>(null);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
+  const [priority, setPriority] = useState<Priority | "">("");
+  const [priorityResult, setPriorityResult] = useState<PrioritizationResult | null>(null);
 
-  useEffect(() => { setInputs(readInputs()); }, []);
+  useEffect(() => {
+    setInputs(readInputs());
+    const draft = stored("raizes:priority:v1") as { priority?: string } | null;
+    if (draft?.priority === "soil_health" || draft?.priority === "water_conservation" ||
+      draft?.priority === "climate_resilience" || draft?.priority === "income") setPriority(draft.priority);
+  }, []);
 
   async function compare() {
     if (!inputs?.proposal || !inputs.point) return;
-    setBusy(true); setMessage(""); setResult(null);
+    setBusy(true); setMessage(""); setResult(null); setPriorityResult(null);
     try {
       const response = await fetch("/api/comparison", {
         method: "POST", headers: { "Content-Type": "application/json" },
@@ -85,6 +106,31 @@ export default function ComparisonExplorer() {
       if (!isResult(data)) throw new Error();
       setResult(data);
     } catch { setMessage("Não foi possível comparar as opções agora. Tente novamente."); }
+    finally { setBusy(false); }
+  }
+
+  function changePriority(value: Priority | "") {
+    setPriority(value); setPriorityResult(null);
+    if (value) localStorage.setItem("raizes:priority:v1", JSON.stringify({ priority: value }));
+    else localStorage.removeItem("raizes:priority:v1");
+  }
+
+  async function applyPriority() {
+    if (!inputs?.proposal || !inputs.point || !priority) return;
+    setBusy(true); setMessage(""); setPriorityResult(null);
+    try {
+      const response = await fetch("/api/prioritization", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          latitude: inputs.point.latitude, longitude: inputs.point.longitude,
+          proposal: inputs.proposal, candidate_crops: inputs.candidates, priority,
+        }),
+      });
+      if (!response.ok) throw new Error();
+      const data: unknown = await response.json();
+      if (!isPrioritizationResult(data)) throw new Error();
+      setPriorityResult(data); setResult(data.comparison);
+    } catch { setMessage("Não foi possível atualizar a prioridade agora. Tente novamente."); }
     finally { setBusy(false); }
   }
 
@@ -102,12 +148,29 @@ export default function ComparisonExplorer() {
       </>}
       {message && <p className="status-message" role="alert">{message}</p>}
     </section>
+    <section className="form-card comparison-controls priority-controls">
+      <h2 className="form-heading">Mudar prioridade</h2>
+      <div className="field">
+        <label htmlFor="comparison-priority">Seu objetivo principal</label>
+        <select id="comparison-priority" value={priority} onChange={(event) => changePriority(event.target.value as Priority | "")}>
+          <option value="">Selecione uma prioridade</option>
+          <option value="soil_health">Saúde do solo</option>
+          <option value="water_conservation">Conservação de água</option>
+          <option value="climate_resilience">Resiliência climática</option>
+          <option value="income">Renda</option>
+        </select>
+      </div>
+      <button className="secondary-button priority-action" type="button" disabled={busy || !priority || !inputs?.proposal || !inputs.point}
+        onClick={() => void applyPriority()}>Reavaliar com esta prioridade</button>
+      {priorityResult && <p className="notice" role="status">{priorityResult.explanation}</p>}
+      <p className="field-hint">A escolha fica salva apenas neste navegador. Nenhuma opção recebe posição no ranking enquanto os indicadores necessários estiverem indisponíveis.</p>
+    </section>
     {result && <section className="comparison-results" aria-live="polite">
       <h2>Comparação</h2>
       <p className={result.status === "limited" ? "notice" : "field-hint"}>{result.reason}</p>
       {result.missing_for_comparison.includes("candidate_crops") && <p><Link href="/culturas-possiveis">Informe culturas candidatas</Link> para completar o filtro.</p>}
       {result.missing_for_comparison.includes("verified_region_rules") && <p>Nenhuma região auditada está disponível para este ponto. A proposta aparece abaixo sem alternativas geradas.</p>}
-      <div className="comparison-scroll" role="region" aria-label="Opções lado a lado" tabIndex={0}>
+      <div className="comparison-scroll" role="region" aria-label="Opções lado a lado, sem classificação" tabIndex={0}>
         <table className="comparison-table">
           <thead><tr><th scope="col">Indicador</th>{result.options.map((option, index) =>
             <th scope="col" key={index}>{option.kind === "proposal" ? "Sua proposta" : `Alternativa ${index}`}</th>)}</tr></thead>

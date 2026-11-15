@@ -94,3 +94,7 @@ h1 { font-size: clamp(32px, 5vw, 53px); line-height: 1.1; letter-spacing: -.035e
 .comparison-table tr:last-child th, .comparison-table tr:last-child td { border-bottom: 0; }
 .comparison-table small { display: block; margin-top: 6px; color: var(--muted); }
 .comparison-table a { color: var(--green); }
+.priority-controls { margin-top: 24px; }
+.priority-controls .field select { width: 100%; border: 1px solid #aebfb3; border-radius: 8px; padding: 12px 13px; color: var(--ink); background: white; }
+.priority-controls .field select:focus-visible { outline: 3px solid #9fdbb6; outline-offset: 2px; }
+.priority-action { margin-top: 18px; }
