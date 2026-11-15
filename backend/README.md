@@ -1,13 +1,13 @@
 # API do Raízes
 
-Base FastAPI para informar o solo e o regime hídrico de uma área de cultivo (UC-03, UC-04 e UC-05).
+Base FastAPI para informar localização, solo, regime hídrico, histórico e culturas candidatas de uma área de cultivo (UC-02 a UC-06).
 
 ## Executar
 
 No diretório `backend`:
 
 ```powershell
-python -m pip install -e .
+python -m pip install -e ".[dev]"
 python -m uvicorn raizes_api.main:app --reload
 ```
 
@@ -16,6 +16,8 @@ O contrato pode ser explorado em `/docs`. O endpoint `POST /api/v1/areas/soil/va
 O endpoint `POST /api/v1/areas/profile/validate` recebe o solo e um regime hídrico obrigatório: `rainfed` (sequeiro) ou `irrigated` (irrigado). Ele devolve o regime no perfil validado e as lacunas conhecidas. Uma área com regimes diferentes deve ser descrita como áreas separadas.
 
 O endpoint `POST /api/v1/areas/history/validate` recebe uma lista cronológica de culturas e meses de início/fim, preservando a sequência validada.
+
+O endpoint `POST /api/v1/areas/candidate-crops/validate` registra culturas candidatas ou `unknown` e devolve `eligibility_evaluated: false`. A lista informada ainda não passou por verificação agronômica.
 
 ## Testar
 
