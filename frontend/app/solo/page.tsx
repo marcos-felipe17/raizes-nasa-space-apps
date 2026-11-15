@@ -1,11 +1,5 @@
 import SoilForm from "./soil-form";
 import Link from "next/link";
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Raízes | Solo da área",
-  description: "Informe as condições do solo da sua área de cultivo.",
-};
 
 export default function SoilPage() {
   return (
