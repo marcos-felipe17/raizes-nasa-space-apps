@@ -1,0 +1,53 @@
+<!-- Secção UC-07: Definir Prioridade -->
+<div style="margin-top: 24px; padding: 16px; border: 1px solid #ccc; border-radius: 8px;">
+  <h2>UC-07 — Definir Prioridade da Área</h2>
+  <label for="select-prioridade">Escolha seu objetivo principal:</label>
+  <select id="select-prioridade" style="padding: 8px; margin: 8px 0; width: 100%;">
+    <option value="saude_solo">Saúde do Solo e Cobertura (Palhada)</option>
+    <option value="conservacao_agua">Resiliência e Conservação Hídrica</option>
+    <option value="produtividade_graos">Produção de Grãos e Segurança Alimentar</option>
+    <option value="renda_economica">Renda / Retorno Econômico</option>
+  </select>
+  <button onclick="enviarPrioridade()" style="padding: 10px 16px; cursor: pointer;">
+    Definir Prioridade
+  </button>
+
+  <!-- Área de Resultado (Critério de Aceite UC-07) -->
+  <div id="resultado-prioridade" style="margin-top: 16px; padding: 12px; background: #f9f9f9; display: none;"></div>
+</div>
+
+<script>
+async function enviarPrioridade() {
+  const prioridadeEscolhida = document.getElementById("select-prioridade").value;
+  const caixaResultado = document.getElementById("resultado-prioridade");
+
+  try {
+    const response = await fetch("http://127.0.0.1:8000/api/v1/prioridade", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prioridade: prioridadeEscolhida })
+    });
+
+    const data = await response.json();
+    const res = data.resultado;
+
+    let html = `<strong>Prioridade no Resultado:</strong> ${res.prioridade_rotulo}<br>`;
+    html += `<small>Origem: ${res.origem} | Parcela: ${data.parcela_id}</small><br><br>`;
+    html += `<p>${data.mensagem_explicativa}</p>`;
+
+    if (res.aviso_limite) {
+      html += `<div style="color: #b45309; background: #fef3c7; padding: 8px; border-radius: 4px;">
+                 ⚠️ ${res.aviso_limite}
+               </div>`;
+    } else {
+      html += `<strong>Pesos explícitos (ADR-0003):</strong> <code>${JSON.stringify(res.pesos_explicitos)}</code>`;
+    }
+
+    caixaResultado.innerHTML = html;
+    caixaResultado.style.display = "block";
+  } catch (err) {
+    caixaResultado.innerHTML = `<span style="color: red;">Erro ao comunicar com a API: ${err.message}</span>`;
+    caixaResultado.style.display = "block";
+  }
+}
+</script>
