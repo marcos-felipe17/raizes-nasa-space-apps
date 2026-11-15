@@ -7,13 +7,19 @@ from .candidate_crops import (
     CandidateCropsValidation,
     validate_candidate_crops,
 )
+from .location import (
+    LocationInput,
+    LocationNotFound,
+    LocationResult,
+    UpstreamError,
+    resolve_location,
+)
 from .history import (
     CultivationHistoryInput,
     CultivationHistoryValidation,
     validate_cultivation_history,
 )
 from .profile import AreaProfileInput, AreaProfileValidation, validate_area_profile
-from .scenarios import Scenario, get_scenario, list_scenarios
 from .soil import SoilInput, SoilValidation, validate_soil
 
 app = FastAPI(title="Raízes API", version="0.1.0")
@@ -60,14 +66,21 @@ def validate_area_candidate_crops(payload: CandidateCropsInput) -> CandidateCrop
     return validate_candidate_crops(payload)
 
 
-@app.get("/api/scenarios", response_model=list[Scenario])
-def list_simulated_scenarios() -> list[Scenario]:
-    return list_scenarios()
-
-
-@app.get("/api/scenarios/{scenario_id}", response_model=Scenario)
-def get_simulated_scenario(scenario_id: str) -> Scenario:
-    scenario = get_scenario(scenario_id)
-    if scenario is None:
-        raise HTTPException(status_code=404, detail="Cenário não encontrado")
-    return scenario
+@app.post(
+    "/api/v1/areas/location/resolve",
+    response_model=LocationResult,
+)
+def resolve_area_location(payload: LocationInput) -> LocationResult:
+    """Resolve o local informado e devolve contexto climático da NASA POWER (UC-02)."""
+    try:
+        return resolve_location(payload)
+    except LocationNotFound as exc:
+        raise HTTPException(
+            status_code=404,
+            detail="Local não encontrado. Inclua o município e a UF, por exemplo: Petrolina, PE.",
+        ) from exc
+    except UpstreamError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="Serviço de localização indisponível agora. Tente novamente.",
+        ) from exc
