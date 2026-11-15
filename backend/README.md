@@ -22,3 +22,15 @@ O endpoint `POST /api/v1/areas/history/validate` recebe uma lista cronológica d
 ```powershell
 python -m unittest discover -s tests -v
 ```
+
+## Dados da NASA POWER (contexto)
+
+Baixa uma vez a série diária de precipitação (PRECTOTCORR) e temperatura (T2M) para um ponto e salva em `data/fixtures/nasa_power/`. A demo lê o arquivo salvo, não a API ao vivo.
+
+```bash
+cd backend
+python scripts/fetch_power.py --name sinop-mt --lat -11.8609 --lon -55.5053 --start 20140101 --end 20241231
+python -m unittest tests.test_fetch_power -v
+```
+
+Os dados são contexto ambiental e não alteram o resultado de nenhuma regra agronômica.
