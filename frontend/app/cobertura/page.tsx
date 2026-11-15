@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import CoverageForm from "./coverage-form";
 
 export const metadata: Metadata = {
@@ -16,6 +15,5 @@ export default function CoveragePage() {
       <p>Informe um ponto aproximado para consultar o clima e veja quais dados da área já foram registrados. A disponibilidade não significa que uma rotação já possa ser recomendada.</p>
     </section>
     <CoverageForm />
-    <p className="page-link"><Link href="/culturas-possiveis">Voltar às culturas</Link> · <Link href="/">Início</Link></p>
   </main>;
 }
