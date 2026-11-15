@@ -68,6 +68,50 @@ class LocationTest(unittest.TestCase):
         )
         self.assertEqual(result.climate.status, "unavailable")
 
+    def test_malformed_geocoder_answers_raise_upstream_error(self):
+        malformed = (
+            [{"foo": 1}],
+            {"error": "x"},
+            [{"lat": "abc", "lon": "1", "display_name": "x"}],
+        )
+        for answer in malformed:
+            with self.subTest(answer=answer):
+                with self.assertRaises(UpstreamError):
+                    geocode("Sinop", fake_get_json(nominatim=answer))
+
+    def test_connection_reset_raises_upstream_error(self):
+        with self.assertRaises(UpstreamError):
+            geocode("Sinop", fake_get_json(nominatim=ConnectionResetError()))
+
+    def test_malformed_nasa_answers_are_unavailable(self):
+        malformed = (
+            ["not", "a", "dict"],
+            {"properties": {"parameter": {"T2M": {"JAN": "x"}, "PRECTOTCORR": {"JAN": 1}}}},
+            {"properties": {"parameter": {"T2M": [1, 2], "PRECTOTCORR": {"JAN": 1}}}},
+        )
+        for answer in malformed:
+            with self.subTest(answer=answer):
+                result = resolve_location(
+                    LocationInput(place="Sinop, MT"), fake_get_json(power=answer)
+                )
+                self.assertEqual(result.climate.status, "unavailable")
+                self.assertAlmostEqual(result.coordinates.lat, -9.3891)
+
+    def test_route_maps_errors_to_404_and_503(self):
+        from unittest.mock import patch
+
+        from fastapi.testclient import TestClient
+
+        from raizes_api.main import app
+
+        client = TestClient(app)
+        url = "/api/v1/areas/location/resolve"
+        # Simula a função usada pela rota; assim o teste não toca a rede.
+        with patch("raizes_api.main.resolve_location", side_effect=LocationNotFound("x")):
+            self.assertEqual(client.post(url, json={"place": "Nada"}).status_code, 404)
+        with patch("raizes_api.main.resolve_location", side_effect=UpstreamError("x")):
+            self.assertEqual(client.post(url, json={"place": "Sinop"}).status_code, 503)
+
 
 if __name__ == "__main__":
     unittest.main()
