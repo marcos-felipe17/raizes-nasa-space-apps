@@ -26,3 +26,7 @@ A UC-08 deve expor dados disponíveis e ausentes. A UC-02 está numa branch remo
 ## Fonte
 
 - [NASA POWER: API de climatologia por ponto](https://power.larc.nasa.gov/docs/services/api/temporal/climatology/).
+
+## Atualização (2026-11-15)
+
+A UC-02 foi integrada à stack Next.js/FastAPI (PR #5). A tela `/localizacao` grava as coordenadas resolvidas como ponto inicial de `/cobertura`. O agricultor continua confirmando o ponto antes da consulta, e o nome da localidade segue sem provar cobertura.

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { FormEvent, useState } from "react";
 
 type Climate = {
@@ -41,7 +42,17 @@ export default function LocationForm() {
         setError(typeof detail === "string" ? detail : "Não foi possível localizar a área.");
         return;
       }
-      setResult(body as LocationResult);
+      const resolved = body as LocationResult;
+      setResult(resolved);
+      try {
+        // Ponto inicial da tela de cobertura (UC-08); o agricultor ainda confirma lá.
+        window.localStorage.setItem(
+          "raizes:coverage-point:v1",
+          JSON.stringify({ latitude: resolved.coordinates.lat, longitude: resolved.coordinates.lon }),
+        );
+      } catch {
+        // Sem armazenamento local, as coordenadas podem ser digitadas na cobertura.
+      }
     } catch {
       setError("Não foi possível localizar a área agora. Tente novamente.");
     } finally {
@@ -89,6 +100,7 @@ export default function LocationForm() {
             <p>Contexto climático indisponível: {result.climate.reason}</p>
           )}
           <p><small>{result.note}</small></p>
+          <p className="page-link"><Link href="/cobertura">Verificar cobertura dos dados neste ponto →</Link></p>
         </article>
       )}
     </section>
