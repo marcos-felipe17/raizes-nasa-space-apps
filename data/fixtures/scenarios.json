@@ -1,0 +1,42 @@
+[
+  {
+    "id": "cerrado-sequeiro-01",
+    "name": "Talhão A — Grãos no Cerrado",
+    "approximate_region": "Sudoeste de Goiás, Brasil",
+    "soil": {"status": "known", "description": "Latossolo argiloso", "source": "external", "source_reference": "Fixture fictícia da PoC"},
+    "water_regime": "rainfed",
+    "history": {"periods": [
+      {"crop": "Soja", "start_month": "2024-10", "end_month": "2025-02"},
+      {"crop": "Milho", "start_month": "2025-03", "end_month": "2025-07"}
+    ]},
+    "possible_crops": ["Soja", "Sorgo", "Braquiária", "Crotalária"],
+    "priority": "Cobertura do solo na entressafra",
+    "simulated": true
+  },
+  {
+    "id": "bahia-irrigado-02",
+    "name": "Pivô 3 — Rotação intensiva",
+    "approximate_region": "Oeste da Bahia, Brasil",
+    "soil": {"status": "known", "description": "Latossolo franco-arenoso", "source": "external", "source_reference": "Fixture fictícia da PoC"},
+    "water_regime": "irrigated",
+    "history": {"periods": [
+      {"crop": "Algodão", "start_month": "2023-10", "end_month": "2024-04"},
+      {"crop": "Soja", "start_month": "2024-10", "end_month": "2025-02"},
+      {"crop": "Feijão", "start_month": "2025-05", "end_month": "2025-08"}
+    ]},
+    "possible_crops": ["Milho", "Trigo", "Gergelim", "Milheto"],
+    "priority": "Diversificação das culturas",
+    "simulated": true
+  },
+  {
+    "id": "parana-parcial-03",
+    "name": "Gleba Encosta — Dados parciais",
+    "approximate_region": "Campos Gerais do Paraná, Brasil",
+    "soil": {"status": "unknown"},
+    "water_regime": "rainfed",
+    "history": null,
+    "possible_crops": ["Trigo", "Nabo forrageiro", "Centeio"],
+    "priority": null,
+    "simulated": true
+  }
+]

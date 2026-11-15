@@ -1,6 +1,6 @@
 # API do Raízes
 
-Base FastAPI para informar o solo e o regime hídrico de uma área de cultivo (UC-03, UC-04 e UC-05).
+API FastAPI para explorar cenários simulados (US-01) e validar solo, regime hídrico e histórico de uma área de cultivo (UC-03 a UC-05).
 
 ## Executar
 
@@ -16,6 +16,8 @@ O contrato pode ser explorado em `/docs`. O endpoint `POST /api/v1/areas/soil/va
 O endpoint `POST /api/v1/areas/profile/validate` recebe o solo e um regime hídrico obrigatório: `rainfed` (sequeiro) ou `irrigated` (irrigado). Ele devolve o regime no perfil validado e as lacunas conhecidas. Uma área com regimes diferentes deve ser descrita como áreas separadas.
 
 O endpoint `POST /api/v1/areas/history/validate` recebe uma lista cronológica de culturas e meses de início/fim, preservando a sequência validada.
+
+Os endpoints `GET /api/scenarios` e `GET /api/scenarios/{id}` expõem apenas fixtures identificadas como simuladas. Um ID inexistente retorna 404.
 
 ## Testar
 

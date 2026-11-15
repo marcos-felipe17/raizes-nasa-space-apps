@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Raízes | Solo da área",
-  description: "Informe as condições do solo da sua área de cultivo.",
+  title: "Raízes | Explorar cenários",
+  description: "Explore cenários simulados de cultivo no Raízes.",
 };
 
 export default function RootLayout({
