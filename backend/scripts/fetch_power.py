@@ -87,13 +87,30 @@ def build_document(
     }
 
 
-def save(document: dict[str, Any], out_dir: Path, name: str, start: str, end: str) -> Path:
-    out_dir.mkdir(parents=True, exist_ok=True)
-    path = out_dir / f"{name}-{start}-{end}.json"
-    if path.exists():
-        return path  # cache: não baixa de novo se o arquivo já existe
+def output_path(out_dir: Path, name: str, start: str, end: str) -> Path:
+    return out_dir / f"{name}-{start}-{end}.json"
+
+
+def save(document: dict[str, Any], path: Path) -> Path:
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(document, ensure_ascii=False, indent=2), encoding="utf-8")
     return path
+
+
+def fetch_cached(
+    name: str,
+    lat: float,
+    lon: float,
+    start: str,
+    end: str,
+    out_dir: Path,
+    fetch: Fetcher = _default_fetch,
+) -> tuple[Path, bool]:
+    """Devolve (arquivo, baixou). Não chama a API se o arquivo já existe."""
+    path = output_path(out_dir, name, start, end)
+    if path.exists():
+        return path, False
+    return save(build_document(name, lat, lon, start, end, fetch), path), True
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -107,13 +124,14 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     try:
-        document = build_document(args.name, args.lat, args.lon, args.start, args.end)
+        path, downloaded = fetch_cached(
+            args.name, args.lat, args.lon, args.start, args.end, args.out_dir
+        )
     except (ValueError, OSError) as exc:
         print(f"erro: {exc}", file=sys.stderr)
         return 1
 
-    path = save(document, args.out_dir, args.name, args.start, args.end)
-    print(path)
+    print(f"{path} ({'baixado' if downloaded else 'já existia, sem nova consulta'})")
     return 0
 
 

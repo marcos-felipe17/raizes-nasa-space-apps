@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.fetch_power import build_document, build_url, save
+from scripts.fetch_power import build_document, build_url, fetch_cached
 
 FAKE = {
     "header": {"fill_value": -999, "api": {"version": "2.10.1"}},
@@ -41,13 +41,22 @@ class FetchPowerTest(unittest.TestCase):
             build_document("x", 0, 0, "20210101", "20200101", fetch=lambda _: FAKE)
 
     def test_existing_file_is_not_downloaded_again(self):
+        calls = []
+
+        def fetch(url):
+            calls.append(url)
+            return FAKE
+
         with tempfile.TemporaryDirectory() as tmp:
             out = Path(tmp)
-            doc = build_document("teste", 0, 0, "20200101", "20200102", fetch=lambda _: FAKE)
-            first = save(doc, out, "teste", "20200101", "20200102")
-            first.write_text("{}", encoding="utf-8")
-            again = save(doc, out, "teste", "20200101", "20200102")
-            self.assertEqual(json.loads(again.read_text(encoding="utf-8")), {})
+            path, downloaded = fetch_cached("teste", 0, 0, "20200101", "20200102", out, fetch)
+            self.assertTrue(downloaded)
+            self.assertEqual(json.loads(path.read_text(encoding="utf-8"))["local"], "teste")
+
+            again, downloaded_again = fetch_cached("teste", 0, 0, "20200101", "20200102", out, fetch)
+            self.assertEqual(again, path)
+            self.assertFalse(downloaded_again)
+            self.assertEqual(len(calls), 1)  # a segunda chamada não consulta a API
 
 
 if __name__ == "__main__":
