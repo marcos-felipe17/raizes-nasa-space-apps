@@ -1,6 +1,6 @@
-## Frontend do Raízes
+# Frontend da UC-03
 
-Aplicação Next.js com seleção de cenários simulados e formulários do perfil da área. A tela `/solo` registra solo conhecido ou “não sei” e sua origem.
+Tela Next.js em `/solo` para registrar solo conhecido ou “não sei” e sua origem.
 
 ```powershell
 npm install
@@ -19,7 +19,3 @@ O perfil validado fica temporariamente no armazenamento local deste navegador.
 # UC-05
 
 A página `/historico` registra culturas e meses de início e fim em ordem cronológica. A resposta validada pela API fica como rascunho neste navegador até a integração com a UC-02.
-
-# US-01
-
-A página inicial lista cenários simulados. O detalhe fica em `/scenarios/[id]`. As consultas são repassadas à API FastAPI por rotas do Next.js; a URL da API continua configurada por `RAIZES_API_URL`.
