@@ -3,6 +3,7 @@
 from fastapi import FastAPI, HTTPException
 
 from .alternatives import AlternativeGenerationInput, AlternativeGenerationResult, generate_alternatives
+from .comparison import ComparisonResult, compare_alternatives
 from .coverage import CoverageInput, CoverageResult, check_coverage
 from .candidate_crops import (
     CandidateCropsInput,
@@ -112,3 +113,7 @@ def check_area_restrictions(payload: RestrictionCheckInput) -> RestrictionCheckR
 @app.post('/api/v1/areas/alternatives/generate', response_model=AlternativeGenerationResult)
 def generate_area_alternatives(payload: AlternativeGenerationInput) -> AlternativeGenerationResult:
     return generate_alternatives(payload)
+
+@app.post('/api/v1/areas/alternatives/compare', response_model=ComparisonResult)
+def compare_area_alternatives(payload: AlternativeGenerationInput) -> ComparisonResult:
+    return compare_alternatives(payload)
