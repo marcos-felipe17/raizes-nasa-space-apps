@@ -23,7 +23,7 @@ export default function CandidateCropsPage() {
         </p>
       </section>
       <CandidateCropsForm />
-      <p className="page-link"><Link href="/historico">Voltar ao histórico</Link></p>
+      <p className="page-link"><Link href="/cobertura">Ver cobertura de dados →</Link></p>
     </main>
   );
 }

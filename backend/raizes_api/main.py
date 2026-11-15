@@ -2,6 +2,7 @@
 
 from fastapi import FastAPI, HTTPException
 
+from .coverage import CoverageInput, CoverageResult, check_coverage
 from .candidate_crops import (
     CandidateCropsInput,
     CandidateCropsValidation,
@@ -71,3 +72,8 @@ def get_simulated_scenario(scenario_id: str) -> Scenario:
     if scenario is None:
         raise HTTPException(status_code=404, detail="Cenário não encontrado")
     return scenario
+
+
+@app.post('/api/v1/areas/coverage', response_model=CoverageResult)
+def get_area_coverage(payload: CoverageInput) -> CoverageResult:
+    return check_coverage(payload)
