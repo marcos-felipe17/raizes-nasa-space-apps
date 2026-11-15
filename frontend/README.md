@@ -15,3 +15,7 @@ A página `/regime-hidrico` permite informar se a área é de sequeiro ou irriga
 Ela valida o perfil composto por solo e regime hídrico pela API FastAPI. O solo
 vem do rascunho da UC-03, quando existe; caso contrário, segue como desconhecido.
 O perfil validado fica temporariamente no armazenamento local deste navegador.
+
+# UC-05
+
+A página `/historico` registra culturas e meses de início e fim em ordem cronológica. A resposta validada pela API fica como rascunho neste navegador até a integração com a UC-02.

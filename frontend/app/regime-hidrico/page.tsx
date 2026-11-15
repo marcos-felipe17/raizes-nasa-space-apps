@@ -23,7 +23,7 @@ export default function WaterRegimePage() {
         </p>
       </section>
       <WaterRegimeForm />
-      <p className="page-link"><Link href="/solo">Voltar ao solo</Link></p>
+      <p className="page-link"><Link href="/solo">Voltar ao solo</Link> · <Link href="/historico">Registrar histórico →</Link></p>
     </main>
   );
 }

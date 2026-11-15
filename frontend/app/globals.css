@@ -41,9 +41,22 @@ h1 { font-size: clamp(32px, 5vw, 53px); line-height: 1.1; letter-spacing: -.035e
 .field input, .field textarea { width: 100%; border: 1px solid #aebfb3; border-radius: 8px; padding: 12px 13px; color: var(--ink); background: white; }
 .field textarea { resize: vertical; }
 .field input:focus, .field textarea:focus, .choice input:focus, button:focus-visible { outline: 3px solid #9fdbb6; outline-offset: 2px; }
+.form-heading { margin: 0 0 22px; font-size: 20px; }
+.history-period { border: 0; border-top: 1px solid var(--line); padding: 23px 0; margin: 0; display: grid; gap: 16px; min-width: 0; }
+.history-period legend { padding: 0 10px 0 0; font-weight: 700; }
+.period-months { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+.secondary-button { border: 1px solid var(--green); background: white; color: var(--green); border-radius: 8px; padding: 12px 18px; font-weight: 700; cursor: pointer; }
+.secondary-button:disabled { opacity: .5; cursor: not-allowed; }
+.text-button { border: 0; background: transparent; color: var(--green); padding: 0; justify-self: start; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.history-summary { padding-left: 22px; margin: 0; }
+.history-summary li { padding: 8px 0 14px; border-bottom: 1px solid var(--line); }
+.history-summary li:last-child { border-bottom: 0; }
+.history-summary strong, .history-summary span { display: block; }
+.history-summary span { color: var(--muted); margin-top: 4px; }
 .primary-button { width: 100%; margin-top: 26px; border: 0; border-radius: 8px; padding: 14px 20px; background: var(--green); color: white; font-weight: 700; cursor: pointer; }
 .primary-button:hover { background: #175239; }
 .primary-button:disabled { opacity: .6; cursor: wait; }
 .status-message { margin: 15px 0 0; color: var(--green); line-height: 1.5; }
 .notice { background: #fff6dd; border-left: 3px solid #d7a32f; padding: 12px; color: #57451c !important; border-radius: 4px; }
 @media (max-width: 720px) { .page-shell { padding: 0 18px 40px; } .intro { padding: 44px 0 30px; } .content-grid { grid-template-columns: 1fr; } .form-card, .summary-card { padding: 23px; } }
+@media (max-width: 420px) { .period-months { grid-template-columns: 1fr; } }
