@@ -78,7 +78,7 @@ def resolve_area_location(payload: LocationInput) -> LocationResult:
     except LocationNotFound as exc:
         raise HTTPException(
             status_code=404,
-            detail="Local não encontrado. Inclua o município e a UF, por exemplo: Petrolina, PE.",
+            detail="Local não encontrado. Inclua o município e a UF, por exemplo: Sinop, MT.",
         ) from exc
     except UpstreamError as exc:
         raise HTTPException(
