@@ -17,7 +17,7 @@ export default function SoilPage() {
         </p>
       </section>
       <SoilForm />
-      <p className="page-link"><Link href="/regime-hidrico">Informar regime hídrico →</Link></p>
+      <p className="page-link"><Link href="/localizacao">Voltar à localização</Link> · <Link href="/regime-hidrico">Informar regime hídrico →</Link></p>
     </main>
   );
 }

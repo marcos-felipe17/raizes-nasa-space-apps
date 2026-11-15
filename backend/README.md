@@ -19,6 +19,12 @@ O endpoint `POST /api/v1/areas/history/validate` recebe uma lista cronológica d
 
 O endpoint `POST /api/v1/areas/candidate-crops/validate` registra culturas candidatas ou `unknown` e devolve `eligibility_evaluated: false`. A lista informada ainda não passou por verificação agronômica.
 
+O endpoint `POST /api/v1/areas/location/resolve` recebe `{"place": "Sinop, MT"}`, obtém coordenadas aproximadas no OpenStreetMap Nominatim e a climatologia da NASA POWER para o ponto. Local não encontrado retorna 404; geocodificador indisponível retorna 503. Se só a NASA falhar, as coordenadas voltam e o clima vem como `unavailable`.
+
+O endpoint `POST /api/v1/areas/coverage` recebe latitude e longitude e informa, por item, se o dado está `available`, `missing` ou `unverified`. `recommendation_ready` é sempre `false`.
+
+Esses dois endpoints consultam serviços externos. Os testes usam respostas simuladas e não dependem de rede.
+
 ## Testar
 
 ```powershell

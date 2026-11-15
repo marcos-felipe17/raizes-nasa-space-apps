@@ -23,3 +23,15 @@ A página `/historico` registra culturas e meses de início e fim em ordem crono
 # UC-06
 
 A página `/culturas-possiveis` registra as culturas candidatas do agricultor ou a lacuna `ainda não sei`. A API valida os nomes sem afirmar elegibilidade, e a resposta fica como rascunho local até a integração com a UC-02.
+
+# UC-02
+
+A página `/localizacao` recebe município e UF e mostra coordenadas aproximadas e o contexto climático da NASA POWER. O ponto encontrado fica salvo neste navegador como ponto inicial da tela de cobertura.
+
+# UC-08
+
+A página `/cobertura` consulta a cobertura climática de um ponto e lê deste navegador quais dados da área já foram informados. Disponibilidade de dado não significa que uma rotação possa ser recomendada.
+
+# Página inicial
+
+A rota `/` lista as etapas existentes, na ordem do fluxo.

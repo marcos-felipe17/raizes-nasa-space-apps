@@ -64,45 +64,54 @@ export default function LocationForm() {
   const annualRain = result?.climate.precipitation_mm_dia?.ANN;
 
   return (
-    <section aria-label="Localização da área">
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="place">Município e UF</label>
-        <input
-          id="place"
-          name="place"
-          value={place}
-          onChange={(event) => setPlace(event.target.value)}
-          placeholder="Ex.: Petrolina, PE"
-          required
-          minLength={2}
-          maxLength={200}
-        />
-        <button type="submit" disabled={busy}>
-          {busy ? "Buscando..." : "Localizar"}
+    <div className="content-grid">
+      <form className="form-card" onSubmit={handleSubmit}>
+        <div className="field">
+          <label htmlFor="place">Município e UF</label>
+          <input
+            id="place"
+            name="place"
+            value={place}
+            onChange={(event) => setPlace(event.target.value)}
+            placeholder="Ex.: Sinop, MT"
+            required
+            minLength={2}
+            maxLength={200}
+          />
+        </div>
+        <p className="field-hint">
+          A busca devolve um ponto aproximado do município, não o da sua parcela.
+        </p>
+        <button className="primary-button" type="submit" disabled={busy}>
+          {busy ? "Buscando…" : "Localizar"}
         </button>
+        {error && <p className="status-message" role="alert">{error}</p>}
       </form>
 
-      {error && <p role="alert">{error}</p>}
-
-      {result && (
-        <article aria-live="polite">
-          <h2>{result.coordinates.display_name}</h2>
-          <p>
-            Coordenadas aproximadas: {result.coordinates.lat.toFixed(4)},{" "}
-            {result.coordinates.lon.toFixed(4)} · fonte: {result.geocoding_provenance}
-          </p>
-          {result.climate.status === "ok" ? (
+      <aside className="summary-card" aria-live="polite">
+        <h2>Local encontrado</h2>
+        {result ? (
+          <>
+            <p className="summary-value">{result.coordinates.display_name}</p>
             <p>
-              Média anual: temperatura {annualTemp ?? "indisponível"} °C · chuva{" "}
-              {annualRain ?? "indisponível"} mm/dia · fonte: {result.climate.provenance}
+              Coordenadas aproximadas: {result.coordinates.lat.toFixed(4)},{" "}
+              {result.coordinates.lon.toFixed(4)} · fonte: {result.geocoding_provenance}
             </p>
-          ) : (
-            <p>Contexto climático indisponível: {result.climate.reason}</p>
-          )}
-          <p><small>{result.note}</small></p>
-          <p className="page-link"><Link href="/cobertura">Verificar cobertura dos dados neste ponto →</Link></p>
-        </article>
-      )}
-    </section>
+            {result.climate.status === "ok" ? (
+              <p>
+                Média anual: temperatura {annualTemp ?? "indisponível"} °C · chuva{" "}
+                {annualRain ?? "indisponível"} mm/dia · fonte: {result.climate.provenance}
+              </p>
+            ) : (
+              <p>Contexto climático indisponível: {result.climate.reason}</p>
+            )}
+            <p className="notice">{result.note}</p>
+            <p className="page-link"><Link href="/cobertura">Verificar cobertura dos dados neste ponto →</Link></p>
+          </>
+        ) : (
+          <p>Informe o município para ver as coordenadas e o contexto climático.</p>
+        )}
+      </aside>
+    </div>
   );
 }

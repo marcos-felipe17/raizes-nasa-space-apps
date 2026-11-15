@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import LocationForm from "./location-form";
 
 export const metadata: Metadata = {
@@ -22,6 +23,7 @@ export default function LocationPage() {
         </p>
       </section>
       <LocationForm />
+      <p className="page-link"><Link href="/">Início</Link> · <Link href="/solo">Informar solo →</Link></p>
     </main>
   );
 }
