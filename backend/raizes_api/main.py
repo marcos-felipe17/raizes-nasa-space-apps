@@ -20,6 +20,7 @@ from .history import (
     CultivationHistoryValidation,
     validate_cultivation_history,
 )
+from .restrictions import RestrictionCheckInput, RestrictionCheckResult, check_restrictions
 from .rotation_proposal import (
     RotationProposalInput,
     RotationProposalValidation,
@@ -100,3 +101,8 @@ def get_area_coverage(payload: CoverageInput) -> CoverageResult:
 @app.post('/api/v1/areas/rotation-proposal/validate', response_model=RotationProposalValidation)
 def validate_area_rotation_proposal(payload: RotationProposalInput) -> RotationProposalValidation:
     return validate_rotation_proposal(payload)
+
+
+@app.post('/api/v1/areas/restrictions/check', response_model=RestrictionCheckResult)
+def check_area_restrictions(payload: RestrictionCheckInput) -> RestrictionCheckResult:
+    return check_restrictions(payload)
