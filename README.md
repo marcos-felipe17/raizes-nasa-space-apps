@@ -20,7 +20,9 @@ As pastas representam responsabilidades lógicas. A implementação pode começa
 A arquitetura conceitual está registrada em [ADR-0001](docs/adr/0001-arquitetura-do-raizes.md). A unidade de análise e os estudos de caso da PoC estão registrados em [ADR-0002](docs/adr/0002-unidade-e-casos-da-poc.md). O método de análise e seus limites de confiabilidade estão em [ADR-0003](docs/adr/0003-metodo-de-analise-e-confiabilidade.md). A elicitação de requisitos e as user cards são mantidas no Notion. A escolha da stack e a validação das fontes regionais ainda estão abertas.
 ## Implementação
 
-- `backend/`: API FastAPI com o contrato da UC-03. Veja [como executar](backend/README.md).
+- `backend/`: API FastAPI com os contratos da UC-03 e UC-04. Veja [como executar](backend/README.md).
 - A aplicação Next.js está em desenvolvimento pela equipe e ainda não aparece nesta branch.
 
 A escolha da stack e o escopo da UC-03 estão registrados em [ADR-0004](docs/adr/0004-stack-da-poc.md).
+
+A modelagem do regime hídrico está registrada em [ADR-0005](docs/adr/0005-regime-hidrico-da-area.md).
