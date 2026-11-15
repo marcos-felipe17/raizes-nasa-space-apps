@@ -16,6 +16,6 @@ export default function RestrictionsPage() {
       <p>Confira a regra aplicada, sua fonte e o motivo do resultado. Por enquanto, esta verificação cobre apenas a diversidade entre as duas culturas; ela não conclui se o plantio é adequado ao solo ou ao clima local.</p>
     </section>
     <RestrictionCheck />
-    <p className="page-link"><Link href="/rotacao">Editar proposta de rotação</Link></p>
+    <p className="page-link"><Link href="/rotacao">Editar proposta de rotação</Link> · <Link href="/alternativas">Explorar alternativas</Link></p>
   </main>;
 }
