@@ -21,6 +21,8 @@ A arquitetura conceitual está registrada em [ADR-0001](docs/adr/0001-arquitetur
 ## Implementação
 
 - `backend/`: API FastAPI com o contrato da UC-03. Veja [como executar](backend/README.md).
-- A aplicação Next.js está em desenvolvimento pela equipe e ainda não aparece nesta branch.
+- `frontend/`: tela Next.js da UC-03 em `/solo`. Veja [como executar](frontend/README.md).
 
 A escolha da stack e o escopo da UC-03 estão registrados em [ADR-0004](docs/adr/0004-stack-da-poc.md).
+
+O uso de rascunho local nesta etapa está registrado em [ADR-0006](docs/adr/0006-rascunho-local-do-solo.md).
