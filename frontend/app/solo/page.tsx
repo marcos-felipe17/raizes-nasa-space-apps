@@ -1,4 +1,5 @@
 import SoilForm from "./soil-form";
+import Link from "next/link";
 
 export default function SoilPage() {
   return (
@@ -16,6 +17,7 @@ export default function SoilPage() {
         </p>
       </section>
       <SoilForm />
+      <p className="page-link"><Link href="/regime-hidrico">Informar regime hídrico →</Link></p>
     </main>
   );
 }
