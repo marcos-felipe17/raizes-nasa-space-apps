@@ -16,6 +16,6 @@ export default function RotationPage() {
       <p>Informe duas safras na ordem planejada. Esta etapa registra sua proposta; as restrições e a adequação serão verificadas depois.</p>
     </section>
     <RotationProposalForm />
-    <p className="page-link"><Link href="/culturas-possiveis">Voltar às culturas candidatas</Link></p>
+    <p className="page-link"><Link href="/restricoes">Verificar restrições →</Link></p>
   </main>;
 }
