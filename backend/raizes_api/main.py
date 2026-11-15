@@ -2,6 +2,7 @@
 
 from fastapi import FastAPI, HTTPException
 
+from .alternatives import AlternativeGenerationInput, AlternativeGenerationResult, generate_alternatives
 from .coverage import CoverageInput, CoverageResult, check_coverage
 from .candidate_crops import (
     CandidateCropsInput,
@@ -106,3 +107,8 @@ def validate_area_rotation_proposal(payload: RotationProposalInput) -> RotationP
 @app.post('/api/v1/areas/restrictions/check', response_model=RestrictionCheckResult)
 def check_area_restrictions(payload: RestrictionCheckInput) -> RestrictionCheckResult:
     return check_restrictions(payload)
+
+
+@app.post('/api/v1/areas/alternatives/generate', response_model=AlternativeGenerationResult)
+def generate_area_alternatives(payload: AlternativeGenerationInput) -> AlternativeGenerationResult:
+    return generate_alternatives(payload)
