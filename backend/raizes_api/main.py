@@ -23,6 +23,8 @@ from .history import (
 from .profile import AreaProfileInput, AreaProfileValidation, validate_area_profile
 from .soil import SoilInput, SoilValidation, validate_soil
 
+from .adequacy import AdequacaoInput, AdequacaoResult, avaliar_adequacao
+
 app = FastAPI(title="Raízes API", version="0.1.0")
 
 
@@ -90,3 +92,8 @@ def resolve_area_location(payload: LocationInput) -> LocationResult:
 @app.post('/api/v1/areas/coverage', response_model=CoverageResult)
 def get_area_coverage(payload: CoverageInput) -> CoverageResult:
     return check_coverage(payload)
+
+
+@app.post('/api/v1/areas/adequacao', response_model=AdequacaoResult)
+def get_area_adequacao(payload: AdequacaoInput) -> AdequacaoResult:
+    return avaliar_adequacao(payload)
