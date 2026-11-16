@@ -4,7 +4,13 @@ export type Solo =
   | { status: "unknown" }
   | { status: "known"; classification: string; source: "farmer" };
 export type RegimeHidrico = "rainfed" | "irrigated";
-export type Area = { place: string; displayName: string; latitude: number; longitude: number };
+export type Clima = {
+  chuvaAno: number | null;
+  temperatura: number | null;
+  mesesChuvosos: string[];
+  mesesSecos: string[];
+};
+export type Area = { place: string; displayName: string; latitude: number; longitude: number; clima: Clima | null };
 export type Safra = { crop: string; start_month: string; end_month: string };
 export type Proposta = { seasons: Safra[] };
 export type EstadoApi = "excluded" | "inconclusive";
@@ -50,7 +56,10 @@ export function lerArea(): Area | null {
   const area = ler<Partial<Area>>(CHAVES.area);
   if (!area || typeof area.place !== "string" || typeof area.latitude !== "number" ||
     typeof area.longitude !== "number") return null;
-  return { place: area.place, displayName: area.displayName ?? area.place, latitude: area.latitude, longitude: area.longitude };
+  return {
+    place: area.place, displayName: area.displayName ?? area.place,
+    latitude: area.latitude, longitude: area.longitude, clima: area.clima ?? null,
+  };
 }
 
 export function lerSolo(): Solo | null {
@@ -111,4 +120,54 @@ export async function enviar<T>(rota: string, corpo: unknown): Promise<{ ok: boo
 
 export function detalheCurto(estado: EstadoApi): string {
   return estado === "excluded" ? "mesma cultura seguida" : "faltam regras da região";
+}
+
+/** Texto simples para o estado devolvido pela verificação de restrições (UC-11). */
+export function motivoSimples(estado: EstadoApi): string {
+  return estado === "excluded"
+    ? "É a mesma cultura nas duas safras, então não é uma rotação. Isso não quer dizer que plantar seja proibido."
+    : "As culturas são diferentes, como pede uma rotação. Mas ainda faltam as regras de plantio da sua região para dizer se ela serve para a sua área.";
+}
+
+const MESES: [string, string][] = [
+  ["JAN", "jan"], ["FEB", "fev"], ["MAR", "mar"], ["APR", "abr"], ["MAY", "mai"], ["JUN", "jun"],
+  ["JUL", "jul"], ["AUG", "ago"], ["SEP", "set"], ["OCT", "out"], ["NOV", "nov"], ["DEC", "dez"],
+];
+
+type ClimaApi = {
+  status?: string;
+  temperature_2m_c?: Record<string, number | null> | null;
+  precipitation_mm_dia?: Record<string, number | null> | null;
+};
+
+function numero(valor: unknown): number | null {
+  return typeof valor === "number" && Number.isFinite(valor) && valor !== -999 ? valor : null;
+}
+
+/**
+ * Resume a climatologia da NASA POWER (médias históricas da região, não da parcela).
+ * A chuva anual é a média diária do ano vezes 365, arredondada para a dezena.
+ */
+export function resumirClima(clima: ClimaApi | null | undefined): Clima | null {
+  if (!clima || clima.status !== "ok") return null;
+  const chuvaDia = numero(clima.precipitation_mm_dia?.ANN);
+  const temperatura = numero(clima.temperature_2m_c?.ANN);
+  const mensal = MESES
+    .map(([chave, nome]) => ({ nome, valor: numero(clima.precipitation_mm_dia?.[chave]) }))
+    .filter((mes): mes is { nome: string; valor: number } => mes.valor !== null);
+  const emOrdem = [...mensal].sort((a, b) => b.valor - a.valor);
+  const completo = mensal.length === 12;
+  const doAno = (nomes: string[]) => MESES.map(([, nome]) => nome).filter((nome) => nomes.includes(nome));
+  if (chuvaDia === null && temperatura === null) return null;
+  return {
+    chuvaAno: chuvaDia === null ? null : Math.round((chuvaDia * 365) / 10) * 10,
+    temperatura: temperatura === null ? null : Math.round(temperatura),
+    mesesChuvosos: completo ? doAno(emOrdem.slice(0, 3).map((mes) => mes.nome)) : [],
+    mesesSecos: completo ? doAno(emOrdem.slice(-3).map((mes) => mes.nome)) : [],
+  };
+}
+
+export function listar(nomes: string[]): string {
+  if (nomes.length < 2) return nomes.join("");
+  return `${nomes.slice(0, -1).join(", ")} e ${nomes[nomes.length - 1]}`;
 }

@@ -167,3 +167,7 @@
 .rz-veredito-titulo[data-estado="inconclusiva"] { color: #6b470d; }
 .rz-veredito-titulo[data-estado="excluida"] { color: var(--rz-excluida); }
 .rz-veredito-motivo { font-size: 17px; line-height: 1.5; color: #3d3c38; }
+
+.rz-nota a { color: var(--rz-azul-ceu); text-underline-offset: 2px; }
+h2.rz-rotulo { font-family: var(--rz-corpo); }
+.rz-grupo > .rz-lista .rz-item:first-child { padding-top: 12px; }

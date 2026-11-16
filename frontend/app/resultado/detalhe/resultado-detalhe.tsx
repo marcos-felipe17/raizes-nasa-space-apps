@@ -3,9 +3,9 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Botao, Espaco, LinkAcao, Veredito, Voltar } from "../../_ui/ui";
-import { CHAVES, EstadoApi, OpcaoComparada, Safra, enviar, lerProposta, rotuloRotacao } from "../../_ui/fluxo";
+import { CHAVES, EstadoApi, OpcaoComparada, Safra, enviar, lerProposta, motivoSimples, rotuloRotacao } from "../../_ui/fluxo";
 
-type Verificacao = { status: EstadoApi; reason: string };
+type Verificacao = { status: EstadoApi };
 
 function opcaoGuardada(indice: number): Safra[] | null {
   try {
@@ -50,26 +50,26 @@ export default function ResultadoDetalhe() {
       ) : null}
       {situacao === "erro" ? (
         <p className="rz-erro" role="alert" style={{ textAlign: "center" }}>
-          Não foi possível avaliar agora. Tente novamente.
+          Não deu para avaliar agora. Tente de novo.
         </p>
       ) : null}
       {verificacao && safras ? (
         <Veredito
           rotacao={rotuloRotacao(safras)}
           estado={excluida ? "excluida" : "inconclusiva"}
-          motivo={verificacao.reason}
+          motivo={motivoSimples(verificacao.status)}
         />
       ) : null}
       <Espaco />
       <div className="rz-acoes rz-acoes--justas">
         {situacao === "sem-dados" ? <Botao href="/plantar">Escolher rotação</Botao> : null}
         {situacao === "pronto" && excluida ? <Botao href="/plantar">Escolher outra rotação</Botao> : null}
-        {situacao === "pronto" && !excluida ? <Botao href="/restricoes">Ver a regra e as fontes</Botao> : null}
+        {situacao === "pronto" && !excluida ? <Botao href="/pendencias">Ver o que falta</Botao> : null}
         {situacao === "pronto" && excluida
-          ? <LinkAcao href="/restricoes">Ver a regra e as fontes</LinkAcao>
-          : <LinkAcao href="/dados">Ver o que já sabemos</LinkAcao>}
+          ? <LinkAcao href="/pendencias">Entender o motivo</LinkAcao>
+          : <LinkAcao href="/plantar">Testar outra rotação</LinkAcao>}
       </div>
-      <p className="rz-rodape">Chuva e temperatura: NASA POWER · Regras da região: ainda não conferidas</p>
+      <p className="rz-rodape">Chuva e temperatura: NASA · Regras da região: ainda não temos</p>
     </>
   );
 }

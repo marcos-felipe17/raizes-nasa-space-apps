@@ -40,17 +40,19 @@ Telas de celular que seguem a identidade visual da equipe (azul NASA, Space Grot
 |---|---|---|
 | `/` | Início | Texto fixo |
 | `/area` | Passo 1: município, água e solo | Localização (UC-02) e perfil (UC-03 e UC-04) |
-| `/dados` | Passo 2: o que já sabemos | Cobertura (UC-08) e o que foi informado no passo 1 |
+| `/dados` | Passo 2: o que já sabemos | Clima da NASA POWER vindo da localização (UC-02) e o que foi informado no passo 1 |
 | `/plantar` | Passo 3: 1ª e 2ª safra | Proposta de rotação (UC-10) |
 | `/resultado` | Rotações avaliadas | Comparação (UC-16) |
 | `/resultado/detalhe` | Estado e motivo de uma rotação | Restrições (UC-11) |
+| `/pendencias` | O que já temos, o que falta e a regra usada, com as fontes | Restrições (UC-11) e os rascunhos do navegador |
 | `/exemplo` e subrotas | Exemplo com os três estados | Dados fictícios, fixos no código |
 
 Limites desta versão:
 
 - No fluxo real nenhuma rotação sai "elegível" e nenhum índice R é exibido, porque ainda não há regras regionais conferidas. O estado "elegível" e o valor de R só aparecem em `/exemplo`, sempre com o selo "Exemplo fictício".
 - A tela de rotação pergunta só as culturas. Como a UC-10 exige um período por safra, a proposta leva meses nominais em sequência a partir do mês atual; eles só ordenam as duas etapas e não são calendário de plantio.
-- O clima mostrado em `/dados` é a média histórica regional da NASA POWER, não medição da parcela.
+- O clima mostrado em `/dados` é a média histórica regional da NASA POWER, não medição da parcela. A chuva anual é a média diária do ano vezes 365, arredondada para a dezena.
+- Os textos do fluxo são escritos na interface, em linguagem simples, a partir do estado devolvido pela API (`inconclusive` ou `excluded`); o motivo técnico completo continua em `/restricoes`.
 
 # Etapas em detalhe
 

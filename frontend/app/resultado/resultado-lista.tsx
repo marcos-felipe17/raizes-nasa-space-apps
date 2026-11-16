@@ -48,10 +48,10 @@ export default function ResultadoLista() {
 
       {situacao === "carregando" ? <p className="rz-texto">Avaliando as rotações…</p> : null}
       {situacao === "sem-dados" ? (
-        <p className="rz-texto">Informe a área e escolha uma rotação para ver o resultado.</p>
+        <p className="rz-texto">Diga onde fica a área e escolha uma rotação para ver o resultado.</p>
       ) : null}
       {situacao === "erro" ? (
-        <p className="rz-erro" role="alert">Não foi possível avaliar agora. Tente novamente.</p>
+        <p className="rz-erro" role="alert">Não deu para avaliar agora. Tente de novo.</p>
       ) : null}
 
       {comparacao ? (
@@ -68,8 +68,7 @@ export default function ResultadoLista() {
           </ul>
           {comparacao.status === "limited" ? (
             <p className="rz-nota">
-              Ainda não há outras opções para comparar: só sugerimos rotações de regiões com regras
-              conferidas, e esta ainda não tem.
+              Ainda não temos outras opções para sugerir nesta região.
             </p>
           ) : null}
         </>

@@ -29,7 +29,7 @@ export default function RotacaoForm() {
     setOcupado(true); setErro("");
     const resposta = await enviar<Validacao>("/api/rotation-proposal", montarProposta(primeira, segunda));
     if (!resposta.ok || !resposta.dados?.proposal) {
-      setErro("Não foi possível registrar a rotação agora. Tente novamente.");
+      setErro("Não deu para guardar a rotação agora. Tente de novo.");
       setOcupado(false);
       return;
     }
