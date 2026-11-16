@@ -42,3 +42,14 @@ python -m unittest tests.test_fetch_power -v
 ```
 
 Os dados são contexto ambiental e não alteram o resultado de nenhuma regra agronômica.
+
+## Época de plantio (ZARC)
+
+`POST /api/v1/zarc/evaluate` avalia cada safra (cultura e decêndio de plantio) pela Tábua de Risco do ZARC 2025/2026, e `POST /api/v1/zarc/coverage` lista as culturas e épocas indicadas no município. `GET /api/v1/areas/cep/{cep}` devolve município, UF e código IBGE (ViaCEP). Decisões em [ADR-0017](../docs/adr/0017-zarc-como-regra-de-epoca.md).
+
+Para atualizar a tábua com o CSV de outra safra, baixado do portal de dados abertos do MAPA:
+
+```bash
+cd backend
+python scripts/build_zarc_fixture.py CAMINHO_DO_CSV --safra 2026-2027 --url URL_DO_CSV --modificado "DATA"
+```

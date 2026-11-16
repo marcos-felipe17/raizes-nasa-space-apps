@@ -14,7 +14,6 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   title: "Raízes",
   description: "Dados de satélite e saber local para escolher a próxima rotação de culturas.",
-  icons: { icon: "/raizes/logo.svg" },
 };
 
 export default function RootLayout({

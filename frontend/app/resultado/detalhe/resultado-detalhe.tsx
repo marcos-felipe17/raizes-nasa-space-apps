@@ -1,76 +1,47 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Botao, Espaco, LinkAcao, Veredito, Voltar } from "../../_ui/ui";
-import { CHAVES, EstadoApi, OpcaoComparada, Safra, enviar, lerProposta, motivoSimples, rotuloRotacao } from "../../_ui/fluxo";
+import { Botao, Espaco, Estado, LinkAcao, Voltar } from "../../_ui/ui";
+import { CHAVES } from "../../_ui/fluxo";
+import { ESTADO_VISUAL, ROTULO_ZARC, ResultadoZarc, explicacaoSafra } from "../../_ui/zarc";
 
-type Verificacao = { status: EstadoApi };
-
-function opcaoGuardada(indice: number): Safra[] | null {
-  try {
-    const bruto = window.sessionStorage.getItem(CHAVES.resultado);
-    const opcoes = bruto ? (JSON.parse(bruto) as OpcaoComparada[]) : null;
-    return Array.isArray(opcoes) && opcoes[indice]?.seasons?.length === 2 ? opcoes[indice].seasons : null;
-  } catch {
-    return null;
-  }
-}
-
+/** Resumo do último resultado: o estado da rotação e a safra que decide esse estado. */
 export default function ResultadoDetalhe() {
-  const indice = Number(useSearchParams().get("i") ?? "0") || 0;
-  const [safras, setSafras] = useState<Safra[] | null>(null);
-  const [verificacao, setVerificacao] = useState<Verificacao | null>(null);
-  const [situacao, setSituacao] = useState<"carregando" | "sem-dados" | "erro" | "pronto">("carregando");
+  const [resultado, setResultado] = useState<ResultadoZarc | null>(null);
+  const [pronto, setPronto] = useState(false);
 
   useEffect(() => {
-    const escolhidas = opcaoGuardada(indice) ?? lerProposta()?.seasons ?? null;
-    setSafras(escolhidas);
-    if (!escolhidas) { setSituacao("sem-dados"); return; }
-    enviar<Verificacao>("/api/restrictions", { proposal: { seasons: escolhidas } }).then((resposta) => {
-      const dados = resposta.dados;
-      if (!resposta.ok || !dados || (dados.status !== "excluded" && dados.status !== "inconclusive")) {
-        setSituacao("erro");
-        return;
-      }
-      setVerificacao(dados);
-      setSituacao("pronto");
-    });
-  }, [indice]);
+    try {
+      const bruto = window.sessionStorage.getItem(CHAVES.resultado);
+      const dados = bruto ? (JSON.parse(bruto) as ResultadoZarc) : null;
+      if (dados && Array.isArray(dados.seasons)) setResultado(dados);
+    } catch { /* sem resultado guardado */ }
+    setPronto(true);
+  }, []);
 
-  const excluida = verificacao?.status === "excluded";
+  const decisiva = resultado?.seasons.find((safra) => safra.status === resultado.status) ?? resultado?.seasons[0];
 
   return (
     <>
       <div className="rz-topo"><Voltar href="/resultado" /></div>
       <Espaco />
-      {situacao === "carregando" ? <p className="rz-texto" style={{ textAlign: "center" }}>Avaliando a rotação…</p> : null}
-      {situacao === "sem-dados" ? (
-        <p className="rz-texto" style={{ textAlign: "center" }}>Escolha uma rotação para ver o resultado.</p>
+      {pronto && !resultado ? (
+        <p className="rz-texto" style={{ textAlign: "center" }}>Escolha as safras para ver o resultado.</p>
       ) : null}
-      {situacao === "erro" ? (
-        <p className="rz-erro" role="alert" style={{ textAlign: "center" }}>
-          Não deu para avaliar agora. Tente de novo.
-        </p>
-      ) : null}
-      {verificacao && safras ? (
-        <Veredito
-          rotacao={rotuloRotacao(safras)}
-          estado={excluida ? "excluida" : "inconclusiva"}
-          motivo={motivoSimples(verificacao.status)}
-        />
+      {resultado && decisiva ? (
+        <section className="rz-veredito" aria-live="polite">
+          <p className="rz-veredito-rotacao">{resultado.seasons.map((s) => s.crop).join(" → ")}</p>
+          <Estado estado={ESTADO_VISUAL[resultado.status]} grande />
+          <h1 className="rz-veredito-titulo" data-estado={ESTADO_VISUAL[resultado.status]}>{ROTULO_ZARC[resultado.status]}</h1>
+          <p className="rz-veredito-motivo">{decisiva.crop}: {explicacaoSafra(decisiva)}</p>
+        </section>
       ) : null}
       <Espaco />
       <div className="rz-acoes rz-acoes--justas">
-        {situacao === "sem-dados" ? <Botao href="/plantar">Escolher rotação</Botao> : null}
-        {situacao === "pronto" && excluida ? <Botao href="/plantar">Escolher outra rotação</Botao> : null}
-        {situacao === "pronto" && !excluida ? <Botao href="/pendencias">Ver o que falta</Botao> : null}
-        {situacao === "pronto" && excluida
-          ? <LinkAcao href="/pendencias">Entender o motivo</LinkAcao>
-          : <LinkAcao href="/plantar">Testar outra rotação</LinkAcao>}
-        <LinkAcao href="/relatos">Consultar relatos semelhantes</LinkAcao>
+        <Botao href={resultado ? "/pendencias" : "/plantar"}>{resultado ? "Ver o que falta" : "Escolher safras"}</Botao>
+        <LinkAcao href="/resultado">Ver todas as safras</LinkAcao>
       </div>
-      <p className="rz-rodape">Chuva e temperatura: NASA · Regras da região: ainda não temos</p>
+      <p className="rz-rodape">Chuva e temperatura: NASA · Época de plantio: ZARC/MAPA</p>
     </>
   );
 }

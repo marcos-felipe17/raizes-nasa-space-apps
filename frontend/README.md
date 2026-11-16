@@ -39,20 +39,27 @@ Telas de celular que seguem a identidade visual da equipe (azul NASA, Space Grot
 | Rota | Tela | De onde vêm os dados |
 |---|---|---|
 | `/` | Início | Texto fixo |
-| `/area` | Passo 1: município, água e solo | Localização (UC-02) e perfil (UC-03 e UC-04) |
-| `/dados` | Passo 2: o que já sabemos | Clima da NASA POWER vindo da localização (UC-02) e o que foi informado no passo 1 |
-| `/plantar` | Passo 3: 1ª e 2ª safra | Proposta de rotação (UC-10) |
-| `/resultado` | Rotações avaliadas | Comparação (UC-16) |
-| `/resultado/detalhe` | Estado e motivo de uma rotação | Restrições (UC-11) |
-| `/pendencias` | O que já temos, o que falta e a regra usada, com as fontes | Restrições (UC-11) e os rascunhos do navegador |
+| `/area` | Passo 1: CEP (opcional), município, água e solo | CEP (ViaCEP), localização (UC-02) e perfil (UC-03 e UC-04) |
+| `/dados` | Passo 2: o que já sabemos | Clima da NASA POWER (UC-02), cobertura do ZARC e o que foi informado no passo 1 |
+| `/plantar` | Passo 3: de 2 a 4 safras, com cultura e época de plantio | Épocas indicadas pelo ZARC no município |
+| `/resultado` | Estado de cada safra, risco climático e fonte | ZARC (`/api/v1/zarc/evaluate`) |
+| `/resultado/detalhe` | Resumo do último resultado | Resultado guardado na sessão |
+| `/pendencias` | O que já temos e o que falta para fechar o resultado | ZARC e os rascunhos do navegador |
 | `/exemplo` e subrotas | Exemplo com os três estados | Dados fictícios, fixos no código |
 
 Limites desta versão:
 
-- No fluxo real nenhuma rotação sai "elegível" e nenhum índice R é exibido, porque ainda não há regras regionais conferidas. O estado "elegível" e o valor de R só aparecem em `/exemplo`, sempre com o selo "Exemplo fictício".
-- A tela de rotação pergunta só as culturas. Como a UC-10 exige um período por safra, a proposta leva meses nominais em sequência a partir do mês atual; eles só ordenam as duas etapas e não são calendário de plantio.
+- As regras de época vêm da Tábua de Risco do ZARC 2025/2026 (MAPA), guardada em `data/fixtures/zarc/` ([ADR-0017](../docs/adr/0017-zarc-como-regra-de-epoca.md)). O risco climático é por safra e nunca vira nota da rotação; o índice R não é exibido no fluxo real.
+- "Elegível" com R e o valor 0,72 só aparecem em `/exemplo`, sempre com o selo "Exemplo fictício".
+- O app ainda não pergunta o grupo de ciclo da semente nem a classe de água do solo (AD1 a AD6); quando o resultado depende disso, a safra fica inconclusiva e a tela diz o motivo.
+- A data sugerida para cada safra é o primeiro decêndio de menor risco depois da safra anterior, contando cerca de 100 dias. É só ponto de partida: o ZARC não confere se uma safra cabe depois da outra.
 - O clima mostrado em `/dados` é a média histórica regional da NASA POWER, não medição da parcela. A chuva anual é a média diária do ano vezes 365, arredondada para a dezena.
-- Os textos do fluxo são escritos na interface, em linguagem simples, a partir do estado devolvido pela API (`inconclusive` ou `excluded`); o motivo técnico completo continua em `/restricoes`.
+
+Para depois:
+
+- Sugestão de textura pelo mapa de solos SoilGrids (ISRIC), como estimativa para o agricultor confirmar. O serviço não respondeu de forma estável nos testes.
+- Foto do solo com um modelo de visão estimando a textura, sempre apresentado como estimativa e com indicação de análise de laboratório.
+- Perguntar o grupo de ciclo da semente e a classe de água do solo, para fechar os resultados que hoje ficam inconclusivos.
 
 # Etapas em detalhe
 
