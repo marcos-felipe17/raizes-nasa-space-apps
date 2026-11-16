@@ -29,6 +29,7 @@ from .rotation_proposal import (
     validate_rotation_proposal,
 )
 from .profile import AreaProfileInput, AreaProfileValidation, validate_area_profile
+from .reports import ReportConsultationResult, ReportQueryInput, consult_reports
 from .soil import SoilInput, SoilValidation, validate_soil
 
 app = FastAPI(title="Raízes API", version="0.1.0")
@@ -117,3 +118,9 @@ def generate_area_alternatives(payload: AlternativeGenerationInput) -> Alternati
 @app.post('/api/v1/areas/alternatives/compare', response_model=ComparisonResult)
 def compare_area_alternatives(payload: AlternativeGenerationInput) -> ComparisonResult:
     return compare_alternatives(payload)
+
+
+@app.post('/api/v1/areas/reports/consult', response_model=ReportConsultationResult)
+def consult_area_reports(payload: ReportQueryInput) -> ReportConsultationResult:
+    """Consultar relatos comparáveis mostrando semelhanças, diferenças e exclusões (UC-18)."""
+    return consult_reports(payload)

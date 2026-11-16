@@ -68,6 +68,7 @@ export default function ResultadoDetalhe() {
         {situacao === "pronto" && excluida
           ? <LinkAcao href="/pendencias">Entender o motivo</LinkAcao>
           : <LinkAcao href="/plantar">Testar outra rotação</LinkAcao>}
+        <LinkAcao href="/relatos">Consultar relatos semelhantes</LinkAcao>
       </div>
       <p className="rz-rodape">Chuva e temperatura: NASA · Regras da região: ainda não temos</p>
     </>
