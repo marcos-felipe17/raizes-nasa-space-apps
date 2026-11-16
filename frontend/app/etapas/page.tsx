@@ -17,6 +17,7 @@ const steps = [
   { href: "/restricoes", title: "Restrições", text: "Regra aplicada à proposta, com motivo e fontes." },
   { href: "/alternativas", title: "Alternativas", text: "Sequências documentadas, só em regiões conferidas." },
   { href: "/comparar", title: "Comparação", text: "Proposta e alternativas lado a lado, sem ranking." },
+  { href: "/relatos", title: "Relatos", text: "Experiências semelhantes, com semelhanças, diferenças e exclusões." },
 ];
 
 export default function EtapasPage() {

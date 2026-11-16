@@ -76,7 +76,10 @@ export default function ResultadoLista() {
 
       <Espaco />
       <AvisoQ />
-      <Botao tipo="secundario" href={situacao === "sem-dados" ? "/area" : "/plantar"}>Nova análise</Botao>
+      <div className="rz-acoes rz-acoes--justas">
+        <Botao href="/relatos">Consultar relatos semelhantes</Botao>
+        <Botao tipo="secundario" href={situacao === "sem-dados" ? "/area" : "/plantar"}>Nova análise</Botao>
+      </div>
     </>
   );
 }
