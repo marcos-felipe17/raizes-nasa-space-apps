@@ -9,6 +9,7 @@ Protótipo de apoio à decisão para explorar rotações de culturas com dados d
 - `frontend/`: aplicação Next.js com as telas do perfil da área.
 - `data/fixtures/`: dados de demonstração identificados, incluindo as séries da NASA POWER.
 - `docs/adr/`: registros das decisões de arquitetura.
+- `docs/uso-de-ia-no-desenvolvimento.md`: registro de como a equipe utilizou IA na construção do protótipo.
 - `src/` e `tests/`: esqueleto das camadas lógicas do [ADR-0001](docs/adr/0001-arquitetura-do-raizes.md), ainda sem código. A implementação atual está em `backend/` e `frontend/`.
 
 ## Estado do projeto
