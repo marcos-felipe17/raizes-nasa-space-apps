@@ -31,6 +31,8 @@ from .rotation_proposal import (
 from .profile import AreaProfileInput, AreaProfileValidation, validate_area_profile
 from .reports import ReportConsultationResult, ReportQueryInput, consult_reports
 from .soil import SoilInput, SoilValidation, validate_soil
+from .cep import CepInvalid, CepNotFound, CepResult, CepUpstreamError, lookup_cep
+from . import zarc
 
 app = FastAPI(title="Raízes API", version="0.1.0")
 
@@ -124,3 +126,28 @@ def compare_area_alternatives(payload: AlternativeGenerationInput) -> Comparison
 def consult_area_reports(payload: ReportQueryInput) -> ReportConsultationResult:
     """Consultar relatos comparáveis mostrando semelhanças, diferenças e exclusões (UC-18)."""
     return consult_reports(payload)
+
+
+@app.get('/api/v1/areas/cep/{cep}', response_model=CepResult)
+def get_cep(cep: str) -> CepResult:
+    """Município, UF e código IBGE a partir do CEP (ViaCEP)."""
+    try:
+        return lookup_cep(cep)
+    except CepInvalid as exc:
+        raise HTTPException(status_code=422, detail="O CEP precisa ter 8 números.") from exc
+    except CepNotFound as exc:
+        raise HTTPException(status_code=404, detail="CEP não encontrado.") from exc
+    except CepUpstreamError as exc:
+        raise HTTPException(status_code=503, detail="Serviço de CEP indisponível agora.") from exc
+
+
+@app.post('/api/v1/zarc/coverage', response_model=zarc.CoverageResult)
+def get_zarc_coverage(payload: zarc.CoverageInput) -> zarc.CoverageResult:
+    """Culturas do ZARC no município e as épocas de plantio indicadas para cada uma."""
+    return zarc.coverage(payload)
+
+
+@app.post('/api/v1/zarc/evaluate', response_model=zarc.ZarcResult)
+def evaluate_zarc(payload: zarc.ZarcInput) -> zarc.ZarcResult:
+    """Avalia cada safra da rotação pela Tábua de Risco do ZARC."""
+    return zarc.evaluate(payload)

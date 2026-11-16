@@ -38,6 +38,9 @@ class Coordinates(BaseModel):
     lat: float
     lon: float
     display_name: str
+    # Preenchidos quando o geocodificador devolve o endereço (usados para achar o município no ZARC).
+    municipality: str | None = None
+    uf: str | None = None
 
 
 class ClimateContext(BaseModel):
@@ -80,7 +83,7 @@ _SHAPE_ERRORS = (KeyError, IndexError, TypeError, ValueError, AttributeError)
 
 
 def geocode(place: str, get_json: GetJson = _get_json) -> Coordinates:
-    query = urllib.parse.urlencode({"q": place, "format": "json", "limit": 1})
+    query = urllib.parse.urlencode({"q": place, "format": "json", "limit": 1, "addressdetails": 1})
     try:
         hits = get_json(f"{NOMINATIM_URL}?{query}")
     except _NETWORK_ERRORS as exc:
@@ -91,10 +94,18 @@ def geocode(place: str, get_json: GetJson = _get_json) -> Coordinates:
 
     try:
         hit = hits[0]
+        address = hit.get("address") if isinstance(hit.get("address"), dict) else {}
+        iso = str(address.get("ISO3166-2-lvl4") or "")
+        municipality = next(
+            (str(address[key]) for key in ("city", "town", "municipality", "village") if address.get(key)),
+            None,
+        )
         return Coordinates(
             lat=float(hit["lat"]),
             lon=float(hit["lon"]),
             display_name=str(hit["display_name"]),
+            municipality=municipality,
+            uf=iso[3:] if iso.startswith("BR-") and len(iso) == 5 else None,
         )
     except _SHAPE_ERRORS as exc:
         raise UpstreamError("resposta inesperada da geocodificação") from exc
