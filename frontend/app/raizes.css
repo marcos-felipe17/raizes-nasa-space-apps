@@ -171,3 +171,27 @@
 .rz-nota a { color: var(--rz-azul-ceu); text-underline-offset: 2px; }
 h2.rz-rotulo { font-family: var(--rz-corpo); }
 .rz-grupo > .rz-lista .rz-item:first-child { padding-top: 12px; }
+
+.rz-opcional { font-weight: 400; color: var(--rz-apoio-claro); }
+.rz-legenda { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px; }
+.rz-remover, .rz-adicionar {
+  border: 0; background: transparent; color: var(--rz-azul-ceu); font-family: var(--rz-corpo);
+  font-size: 14px; font-weight: 500; cursor: pointer; padding: 4px 0;
+}
+.rz-adicionar {
+  height: 48px; border: 1.5px dashed var(--rz-borda); border-radius: 14px; font-size: 15px; width: 100%;
+}
+.rz-epoca { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+.rz-epoca-linha { display: flex; gap: 8px; }
+.rz-selecao--curta { width: 136px; flex-shrink: 0; }
+.rz-safras { display: flex; flex-direction: column; gap: 10px; list-style: none; padding: 0; margin: 0; }
+.rz-safra { display: flex; gap: 14px; padding: 16px; border-radius: 16px; background: var(--rz-superficie); }
+.rz-safra-texto { flex: 1 0 0; min-width: 1px; display: flex; flex-direction: column; gap: 4px; }
+.rz-safra-texto strong { font-weight: 500; font-size: 16px; color: var(--rz-primario); line-height: normal; }
+.rz-safra-texto span { font-size: 13px; line-height: 1.35; }
+.rz-safra-texto small { font-size: 13px; line-height: 1.45; color: var(--rz-apoio); }
+.rz-cor-indisponivel { color: var(--rz-apoio); }
+.rz-cabecalho-estado { display: flex; align-items: center; gap: 10px; }
+.rz-cabecalho-estado p { font-size: 17px; font-weight: 500; line-height: normal; }
+.rz-fonte { font-size: 12px; color: var(--rz-apoio-claro); line-height: 1.5; }
+.rz-fonte a { color: var(--rz-azul-ceu); text-underline-offset: 2px; }

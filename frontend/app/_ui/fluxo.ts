@@ -10,7 +10,16 @@ export type Clima = {
   mesesChuvosos: string[];
   mesesSecos: string[];
 };
-export type Area = { place: string; displayName: string; latitude: number; longitude: number; clima: Clima | null };
+export type Area = {
+  place: string;
+  displayName: string;
+  latitude: number;
+  longitude: number;
+  clima: Clima | null;
+  municipio: string | null;
+  uf: string | null;
+  ibge: string | null;
+};
 export type Safra = { crop: string; start_month: string; end_month: string };
 export type Proposta = { seasons: Safra[] };
 export type EstadoApi = "excluded" | "inconclusive";
@@ -24,7 +33,30 @@ export const CHAVES = {
   culturas: "raizes:candidate-crops:v1",
   proposta: "raizes:rotation-proposal:v1",
   resultado: "raizes:resultado:v1",
+  safras: "raizes:safras:v1",
 } as const;
+
+/** Textura no formato do ZARC: 1 arenoso, 2 médio, 3 argiloso. */
+export function texturaZarc(solo: Solo | null): 1 | 2 | 3 | null {
+  if (solo?.status !== "known") return null;
+  const indice = TEXTURAS.findIndex((textura) => textura.valor === solo.classification);
+  return indice >= 1 && indice <= 3 ? (indice as 1 | 2 | 3) : null;
+}
+
+export function regimeGuardado(): RegimeHidrico {
+  const perfil = ler<{ profile?: { water_regime?: string } }>(CHAVES.perfil);
+  return perfil?.profile?.water_regime === "irrigated" ? "irrigated" : "rainfed";
+}
+
+export type SafraEscolhida = { crop: string; planting_decendio: number };
+
+export function lerSafras(): SafraEscolhida[] | null {
+  const safras = ler<unknown>(CHAVES.safras);
+  if (!Array.isArray(safras) || safras.length < 1) return null;
+  const validas = safras.every((s) => s && typeof s.crop === "string" &&
+    Number.isInteger(s.planting_decendio) && s.planting_decendio >= 1 && s.planting_decendio <= 36);
+  return validas ? (safras as SafraEscolhida[]) : null;
+}
 
 export const TEXTURAS = [
   { valor: "", rotulo: "Não sei" },
@@ -34,6 +66,8 @@ export const TEXTURAS = [
 ];
 
 export const CULTURAS = ["Feijão", "Milho", "Sorgo", "Mandioca", "Soja", "Milheto"];
+/** Culturas que o app oferece além das do ZARC; aparecem como "sem cobertura" quando escolhidas. */
+export const CULTURAS_EXTRAS = ["Mandioca", "Milheto"];
 
 export function ler<T>(chave: string): T | null {
   try {
@@ -59,6 +93,7 @@ export function lerArea(): Area | null {
   return {
     place: area.place, displayName: area.displayName ?? area.place,
     latitude: area.latitude, longitude: area.longitude, clima: area.clima ?? null,
+    municipio: area.municipio ?? null, uf: area.uf ?? null, ibge: area.ibge ?? null,
   };
 }
 
