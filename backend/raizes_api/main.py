@@ -29,6 +29,7 @@ from .rotation_proposal import (
     validate_rotation_proposal,
 )
 from .profile import AreaProfileInput, AreaProfileValidation, validate_area_profile
+from .sinop_evidence import SinopEvidenceResult, get_sinop_evidence
 from .soil import SoilInput, SoilValidation, validate_soil
 
 app = FastAPI(title="Raízes API", version="0.1.0")
@@ -117,3 +118,8 @@ def generate_area_alternatives(payload: AlternativeGenerationInput) -> Alternati
 @app.post('/api/v1/areas/alternatives/compare', response_model=ComparisonResult)
 def compare_area_alternatives(payload: AlternativeGenerationInput) -> ComparisonResult:
     return compare_alternatives(payload)
+
+
+@app.get('/api/v1/regions/sinop/evidence', response_model=SinopEvidenceResult)
+def get_sinop_experiment_evidence() -> SinopEvidenceResult:
+    return get_sinop_evidence()

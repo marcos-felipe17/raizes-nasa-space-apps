@@ -1,0 +1,74 @@
+{
+  "id": "embrapa-sinop-spd-2014-2016",
+  "kind": "published_experiment_observations",
+  "site": "Embrapa Agrossilvipastoril, Sinop, MT",
+  "soil_reported": "Latossolo Vermelho Amarelo argiloso",
+  "management_reported": "sistema plantio direto",
+  "plot_area_m2": 30,
+  "sample_area_m2": 2,
+  "samples_per_plot": 3,
+  "source": {
+    "title": "Produção de grãos e de palhada em diferentes rotações de culturas manejadas com sistema plantio direto",
+    "authors": "Spera, Magalhães, Denardin, Tardin, Matos e Souza",
+    "publisher": "Embrapa Agrossilvipastoril",
+    "publication_year": 2019,
+    "url": "https://ainfo.cnptia.embrapa.br/digital/bitstream/item/200276/1/2019-cpamt-agrossilvipastoril-part-1-cap-4-producao-graos-palhada-diferentes-rotacoes-culturas-sistema-plantio-direto-p-47-51.pdf",
+    "printed_pages": [48, 49, 50, 51],
+    "tables": [2, 3, 4]
+  },
+  "rules_from_source": [
+    {
+      "id": "sinop.spd_principles.v1",
+      "type": "management_principle",
+      "statement": "O sistema plantio direto pressupõe não revolvimento do solo, rotação de culturas e cobertura permanente com palha.",
+      "source_printed_page": 48,
+      "scope": "Descrição do manejo do experimento e princípio do SPD; não é teste de elegibilidade de uma fazenda.",
+      "machine_checkable_with_current_inputs": false
+    },
+    {
+      "id": "sinop.crop_sequence_observed.v1",
+      "type": "observed_sequence",
+      "statement": "No experimento, soja foi semeada na primeira safra e os tratamentos incluíram milheto, milho e milho consorciado com braquiária na segunda safra.",
+      "source_printed_page": 48,
+      "scope": "Tratamentos observados em parcelas experimentais de Sinop; não autoriza plantio em todo o município.",
+      "machine_checkable_with_current_inputs": false
+    }
+  ],
+  "observations": [
+    {
+      "treatment_id": "soy_maize",
+      "sequence_reported": ["soja", "milho"],
+      "second_crop_management": "milho solteiro",
+      "measurements": [
+        {"harvest_year": 2014, "source_table": 2, "maize_grain_kg_ha": 6786, "second_season_straw_kg_ha": 6413, "two_season_straw_kg_ha": 9949, "soy_grain_kg_ha": null},
+        {"harvest_year": 2016, "source_table": 4, "maize_grain_kg_ha": 3822, "second_season_straw_kg_ha": 7869, "two_season_straw_kg_ha": 11926, "soy_grain_kg_ha": 2962, "soy_grain_source_table": 3}
+      ]
+    },
+    {
+      "treatment_id": "soy_millet",
+      "sequence_reported": ["soja", "milheto"],
+      "second_crop_management": "milheto",
+      "measurements": [
+        {"harvest_year": 2014, "source_table": 2, "maize_grain_kg_ha": null, "second_season_straw_kg_ha": 5714, "two_season_straw_kg_ha": 9250, "soy_grain_kg_ha": null},
+        {"harvest_year": 2016, "source_table": 4, "maize_grain_kg_ha": null, "second_season_straw_kg_ha": 6700, "two_season_straw_kg_ha": 10312, "soy_grain_kg_ha": 2842, "soy_grain_source_table": 3}
+      ]
+    },
+    {
+      "treatment_id": "soy_maize_brachiaria",
+      "sequence_reported": ["soja", "milho + braquiária"],
+      "second_crop_management": "milho consorciado com Brachiaria brizantha cv. Marandú; tratamento de densidade padrão",
+      "measurements": [
+        {"harvest_year": 2014, "source_table": 2, "maize_grain_kg_ha": 7540, "second_season_straw_kg_ha": 11943, "two_season_straw_kg_ha": 15479, "soy_grain_kg_ha": null},
+        {"harvest_year": 2016, "source_table": 4, "maize_grain_kg_ha": 3581, "second_season_straw_kg_ha": 12359, "two_season_straw_kg_ha": 16468, "soy_grain_kg_ha": 2702, "soy_grain_source_table": 3}
+      ]
+    }
+  ],
+  "missing_for_field_recommendation": [
+    "Identificador e limites das parcelas de cada tratamento não publicados neste capítulo.",
+    "Meses exatos de semeadura e colheita por tratamento não publicados neste capítulo.",
+    "Cultivar de soja, manejo hídrico e solo da propriedade do usuário não conferidos.",
+    "Regras locais de janela de plantio e restrições por cultura, solo e safra ainda não auditadas."
+  ],
+  "verified_for_generation": false,
+  "note": "Valores são observações históricas do experimento, não estimativas nem scores do Raízes. Tratamentos de densidade dupla e sequências com algodão foram excluídos deste recorte para não misturar manejos."
+}
