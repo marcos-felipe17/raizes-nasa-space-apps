@@ -3,9 +3,13 @@
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { Botao, Chip, Espaco, Progresso } from "../_ui/ui";
-import { CHAVES, RegimeHidrico, Solo, TEXTURAS, enviar, gravar, ler, lerArea, lerSolo } from "../_ui/fluxo";
+import { CHAVES, RegimeHidrico, Solo, TEXTURAS, enviar, gravar, ler, lerArea, lerSolo, resumirClima } from "../_ui/fluxo";
 
-type Localizacao = { place: string; coordinates: { lat: number; lon: number; display_name: string } };
+type Localizacao = {
+  place: string;
+  coordinates: { lat: number; lon: number; display_name: string };
+  climate?: Parameters<typeof resumirClima>[0];
+};
 type Perfil = { profile: { soil: Solo; water_regime: RegimeHidrico }; missing_for_analysis: string[] };
 
 export default function AreaForm() {
@@ -30,14 +34,14 @@ export default function AreaForm() {
   async function continuar(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault();
     const lugar = municipio.trim();
-    if (lugar.length < 2) { setErro("Informe o município da área."); return; }
+    if (lugar.length < 2) { setErro("Escreva o nome do município."); return; }
     setOcupado(true); setErro("");
 
     const local = await enviar<Localizacao & { detail?: unknown }>("/api/location", { place: lugar });
     if (!local.ok || !local.dados?.coordinates) {
       setErro(local.status === 404
-        ? "Não encontramos esse município. Tente com a sigla do estado, como “Sinop, MT”."
-        : "Não foi possível localizar a área agora. Tente novamente.");
+        ? "Não achamos esse município. Tente com a sigla do estado, como “Sinop, MT”."
+        : "Não deu para buscar a área agora. Tente de novo.");
       setOcupado(false);
       return;
     }
@@ -47,13 +51,16 @@ export default function AreaForm() {
       : { status: "unknown" };
     const perfil = await enviar<Perfil>("/api/profile", { soil: solo, water_regime: regime });
     if (!perfil.ok || !perfil.dados?.profile) {
-      setErro("Não foi possível registrar a água e o solo agora. Tente novamente.");
+      setErro("Não deu para guardar a água e o solo agora. Tente de novo.");
       setOcupado(false);
       return;
     }
 
     const { lat, lon, display_name } = local.dados.coordinates;
-    gravar(CHAVES.area, { place: lugar, displayName: display_name, latitude: lat, longitude: lon });
+    gravar(CHAVES.area, {
+      place: lugar, displayName: display_name, latitude: lat, longitude: lon,
+      clima: resumirClima(local.dados.climate),
+    });
     gravar(CHAVES.ponto, { latitude: lat, longitude: lon });
     gravar(CHAVES.perfil, perfil.dados);
     gravar(CHAVES.solo, { soil: perfil.dados.profile.soil, missing_for_analysis: perfil.dados.missing_for_analysis });

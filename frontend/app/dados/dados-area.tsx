@@ -3,35 +3,16 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Botao, Espaco, ItemDado, Progresso } from "../_ui/ui";
-import { Area, Solo, enviar, lerArea, lerSolo } from "../_ui/fluxo";
+import { Area, Solo, lerArea, lerSolo, listar } from "../_ui/fluxo";
 
-type Item = { key: string; status: "available" | "missing" | "unverified" };
-type Cobertura = { items: Item[] };
-
-const SEM_DADO = {
-  missing: "A NASA não tem esse dado para este ponto.",
-  unverified: "Não deu para consultar agora. Tente de novo mais tarde.",
-  carregando: "Consultando a NASA…",
-};
+const SEM_CLIMA = "Não deu para consultar a NASA agora. Volte ao passo 1 e tente de novo.";
 
 export default function DadosArea() {
   const [area, setArea] = useState<Area | null>(null);
   const [solo, setSolo] = useState<Solo | null>(null);
   const [pronto, setPronto] = useState(false);
-  const [itens, setItens] = useState<Item[] | null>(null);
 
-  useEffect(() => {
-    const guardada = lerArea();
-    const soloGuardado = lerSolo();
-    setArea(guardada); setSolo(soloGuardado); setPronto(true);
-    if (!guardada) return;
-    enviar<Cobertura>("/api/data-coverage", {
-      latitude: guardada.latitude, longitude: guardada.longitude,
-      soil_known: soloGuardado?.status === "known", water_regime_known: true,
-    }).then((resposta) => {
-      setItens(resposta.ok && Array.isArray(resposta.dados?.items) ? resposta.dados.items : []);
-    });
-  }, []);
+  useEffect(() => { setArea(lerArea()); setSolo(lerSolo()); setPronto(true); }, []);
 
   if (pronto && !area) {
     return (
@@ -45,16 +26,14 @@ export default function DadosArea() {
     );
   }
 
-  function clima(chave: string): { encontrado: boolean; origem: string } {
-    if (itens === null) return { encontrado: false, origem: SEM_DADO.carregando };
-    const status = itens.find((item) => item.key === chave)?.status ?? "unverified";
-    return status === "available"
-      ? { encontrado: true, origem: "NASA POWER · média histórica da região" }
-      : { encontrado: false, origem: SEM_DADO[status] };
-  }
-
-  const chuva = clima("precipitation");
-  const temperatura = clima("temperature");
+  const clima = area?.clima ?? null;
+  const chuva = clima?.chuvaAno != null
+    ? `Cerca de ${clima.chuvaAno.toLocaleString("pt-BR")} mm por ano${
+      clima.mesesChuvosos.length ? `. Chove mais em ${listar(clima.mesesChuvosos)}` : ""} · NASA`
+    : SEM_CLIMA;
+  const temperatura = clima?.temperatura != null
+    ? `Média de ${clima.temperatura} °C no ano · NASA`
+    : SEM_CLIMA;
   const soloConhecido = solo?.status === "known";
 
   return (
@@ -65,27 +44,25 @@ export default function DadosArea() {
         {area ? <p className="rz-sobretitulo">{area.displayName}</p> : null}
       </div>
       <ul className="rz-lista">
-        <ItemDado titulo="Chuva na região" encontrado={chuva.encontrado} origem={chuva.origem} />
-        <ItemDado titulo="Temperatura" encontrado={temperatura.encontrado} origem={temperatura.origem} />
+        <ItemDado titulo="Chuva na região" encontrado={clima?.chuvaAno != null} origem={pronto ? chuva : ""} />
+        <ItemDado titulo="Temperatura" encontrado={clima?.temperatura != null} origem={pronto ? temperatura : ""} />
         <ItemDado
           titulo="Regras de plantio da região" encontrado={false}
-          origem="Ainda não temos regras conferidas para esta região."
+          origem="Ainda não temos para esta região."
         />
         <ItemDado
           titulo="Tipo de solo" encontrado={soloConhecido}
           origem={soloConhecido && solo?.status === "known"
             ? `${solo.classification} · você informou`
-            : "Não encontramos. Você pode informar."}
+            : "Você ainda não informou."}
           acao={soloConhecido ? undefined : <Link href="/area" className="rz-informar">Informar</Link>}
         />
       </ul>
       <Espaco />
       <div className="rz-acoes">
-        <Botao href="/plantar">Continuar assim mesmo</Botao>
+        <Botao href="/plantar">Continuar</Botao>
         <p className="rz-rodape">
-          {soloConhecido
-            ? "Sem regras da região, as rotações podem ficar inconclusivas."
-            : "Sem o solo e sem regras da região, as rotações podem ficar inconclusivas."}
+          Os números da NASA são a média da região, não da sua roça.
         </p>
       </div>
     </>
